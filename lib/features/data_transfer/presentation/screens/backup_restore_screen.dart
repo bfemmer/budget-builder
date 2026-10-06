@@ -123,17 +123,17 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                       icon: const Icon(Icons.download),
                       label: const Text('GENERATE BACKUP JSON'),
                       onPressed: () async {
+                        final messenger = ScaffoldMessenger.of(context);
                         final json = await backupVm.exportToJson();
+                        if (!mounted) return;
                         if (json != null) {
                           setState(() => _exportedJson = json);
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Backup file created in App Documents folder!'),
-                                backgroundColor: AppColors.statusGreen,
-                              ),
-                            );
-                          }
+                          messenger.showSnackBar(
+                            const SnackBar(
+                              content: Text('Backup file created in App Documents folder!'),
+                              backgroundColor: AppColors.statusGreen,
+                            ),
+                          );
                         }
                       },
                     ),
@@ -234,27 +234,25 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                           );
                           return;
                         }
+                        final messenger = ScaffoldMessenger.of(context);
                         final success = await backupVm.importFromJson(text);
+                        if (!mounted) return;
                         if (success) {
                           _refreshAllViewModels();
                           _importController.clear();
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Database restored successfully!'),
-                                backgroundColor: AppColors.statusGreen,
-                              ),
-                            );
-                          }
+                          messenger.showSnackBar(
+                            const SnackBar(
+                              content: Text('Database restored successfully!'),
+                              backgroundColor: AppColors.statusGreen,
+                            ),
+                          );
                         } else {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Failed to restore data. Check JSON format.'),
-                                backgroundColor: AppColors.statusRed,
-                              ),
-                            );
-                          }
+                          messenger.showSnackBar(
+                            const SnackBar(
+                              content: Text('Failed to restore data. Check JSON format.'),
+                              backgroundColor: AppColors.statusRed,
+                            ),
+                          );
                         }
                       },
                     ),

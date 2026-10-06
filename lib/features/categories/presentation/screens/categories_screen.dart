@@ -140,7 +140,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             ),
                           );
                         }
-                        if (mounted) Navigator.pop(context);
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
                       },
                       child: Text(
                         isEditing ? 'UPDATE LIMIT' : 'CREATE CATEGORY',
