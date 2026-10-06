@@ -26,14 +26,22 @@ class _ReportsScreenState extends State<ReportsScreen> {
     final reportsVm = Provider.of<ReportsViewModel>(context);
     final catVm = Provider.of<CategoryViewModel>(context);
 
-    final totalSpent = reportsVm.totalSpentInTimeframe;
-    final categoryMap = reportsVm.categorySpendingMap;
-    final needsSpent = reportsVm.totalNeedsInTimeframe;
-    final wantsSpent = reportsVm.totalWantsInTimeframe;
+    final totalExpenses = reportsVm.getTotalExpenses(catVm);
+    final totalIncome = reportsVm.getTotalIncome(catVm);
+    final netCashFlow = reportsVm.getNetCashFlow(catVm);
+
+    final expenseMap = reportsVm.getExpenseCategoryMap(catVm);
+    final incomeMap = reportsVm.getIncomeCategoryMap(catVm);
+
+    final needsSpent = reportsVm.getNeedsExpenses(catVm);
+    final wantsSpent = reportsVm.getWantsExpenses(catVm);
+
+    final expenseCount = reportsVm.getExpenseTransactions(catVm).length;
+    final incomeCount = reportsVm.getIncomeTransactions(catVm).length;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Spending Reports'),
+        title: const Text('Financial & Spending Reports'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -71,7 +79,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
             const SizedBox(height: 20),
 
-            // Summary Total Card
+            // Income vs Expense Cash Flow Comparison Card
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -83,32 +91,119 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 ),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: AppColors.cardBorder),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 8,
+                    offset: Offset(0, 4),
+                  )
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'TOTAL EXPENDITURE IN TIMEFRAME',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.usafGold,
-                      letterSpacing: 1.0,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'CASH FLOW SUMMARY',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.usafGold,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: (netCashFlow >= 0 ? AppColors.statusGreen : AppColors.statusRed)
+                              .withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          netCashFlow >= 0 ? 'NET SURPLUS' : 'NET DEFICIT',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            color: netCashFlow >= 0 ? AppColors.statusGreen : AppColors.statusRed,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    CurrencyFormatter.format(totalSpent),
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+
+                  const SizedBox(height: 16),
+
+                  // Income & Expense Metrics Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.arrow_downward, color: AppColors.statusGreen, size: 16),
+                              SizedBox(width: 4),
+                              Text('TOTAL INCOME', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            CurrencyFormatter.format(totalIncome),
+                            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.statusGreen),
+                          ),
+                        ],
+                      ),
+                      Container(height: 36, width: 1, color: AppColors.cardBorder),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Row(
+                            children: [
+                              Icon(Icons.arrow_upward, color: AppColors.statusRed, size: 16),
+                              SizedBox(width: 4),
+                              Text('TOTAL EXPENSES', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            CurrencyFormatter.format(totalExpenses),
+                            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+
+                  const SizedBox(height: 16),
+                  const Divider(color: AppColors.cardBorder, height: 1),
+                  const SizedBox(height: 12),
+
+                  // Net Cash Flow Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Net Cash Flow (Income - Expenses):',
+                        style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      ),
+                      Text(
+                        '${netCashFlow >= 0 ? '+' : ''}${CurrencyFormatter.format(netCashFlow)}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: netCashFlow >= 0 ? AppColors.statusGreen : AppColors.statusRed,
+                        ),
+                      ),
+                    ],
+                  ),
+
                   const SizedBox(height: 4),
                   Text(
-                    '${reportsVm.filteredTransactions.length} Transactions Recorded',
-                    style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                    '$expenseCount Expenses • $incomeCount Income Records',
+                    style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
                   ),
                 ],
               ),
@@ -116,9 +211,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
             const SizedBox(height: 24),
 
-            // Need vs Want Analysis Card
+            // Need vs Want Analysis Card (Expenses Only)
             const Text(
-              'AFAS FINANCIAL AWARENESS (NEED VS WANT)',
+              'AFAS FINANCIAL AWARENESS (NEED VS WANT EXPENSES)',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -140,14 +235,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildNeedWantMetric('NEEDS (Essential)', needsSpent, totalSpent, AppColors.tagNeed),
-                      _buildNeedWantMetric('WANTS (Discretionary)', wantsSpent, totalSpent, AppColors.tagWant),
+                      _buildNeedWantMetric('NEEDS (Essential)', needsSpent, totalExpenses, AppColors.tagNeed),
+                      _buildNeedWantMetric('WANTS (Discretionary)', wantsSpent, totalExpenses, AppColors.tagWant),
                     ],
                   ),
                   const SizedBox(height: 16),
 
                   // Stacked Need vs Want Bar
-                  if (totalSpent > 0)
+                  if (totalExpenses > 0)
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: SizedBox(
@@ -172,9 +267,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
             const SizedBox(height: 24),
 
-            // Category Breakdown Chart / List
+            // Spending by Category List (Expenses Only)
             const Text(
-              'SPENDING BY CATEGORY',
+              'SPENDING BY CATEGORY (EXPENSES ONLY)',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -184,7 +279,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
             const SizedBox(height: 12),
 
-            categoryMap.isEmpty
+            expenseMap.isEmpty
                 ? Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(24),
@@ -195,7 +290,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     ),
                     child: const Center(
                       child: Text(
-                        'No expenditure data for selected timeframe.',
+                        'No expense transactions for selected timeframe.',
                         style: TextStyle(color: AppColors.textSecondary),
                       ),
                     ),
@@ -203,13 +298,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 : ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: categoryMap.keys.length,
+                    itemCount: expenseMap.keys.length,
                     separatorBuilder: (_, _) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
-                      final categoryId = categoryMap.keys.elementAt(index);
-                      final spent = categoryMap[categoryId] ?? 0.0;
+                      final categoryId = expenseMap.keys.elementAt(index);
+                      final spent = expenseMap[categoryId] ?? 0.0;
                       final cat = catVm.getCategoryById(categoryId);
-                      final percent = totalSpent > 0 ? (spent / totalSpent) * 100 : 0.0;
+                      final percent = totalExpenses > 0 ? (spent / totalExpenses) * 100 : 0.0;
                       final color = cat != null ? Color(cat.colorValue) : AppColors.accentBlue;
 
                       return Container(
@@ -255,7 +350,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(4),
                                     child: LinearProgressIndicator(
-                                      value: totalSpent > 0 ? spent / totalSpent : 0.0,
+                                      value: totalExpenses > 0 ? spent / totalExpenses : 0.0,
                                       minHeight: 8,
                                       backgroundColor: AppColors.inputBackground,
                                       valueColor: AlwaysStoppedAnimation<Color>(color),
@@ -274,6 +369,75 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       );
                     },
                   ),
+
+            // Income Sources Section (if income exists)
+            if (incomeMap.isNotEmpty) ...[
+              const SizedBox(height: 24),
+              const Text(
+                'INCOME SOURCES IN TIMEFRAME',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.statusGreen,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 12),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: incomeMap.keys.length,
+                separatorBuilder: (_, _) => const SizedBox(height: 10),
+                itemBuilder: (context, index) {
+                  final categoryId = incomeMap.keys.elementAt(index);
+                  final amount = incomeMap[categoryId] ?? 0.0;
+                  final cat = catVm.getCategoryById(categoryId);
+
+                  return Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.navyCard,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.cardBorder),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.statusGreen.withValues(alpha: 0.2),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.account_balance_wallet,
+                                color: AppColors.statusGreen,
+                                size: 18,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              cat?.name ?? 'Income',
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          CurrencyFormatter.format(amount),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: AppColors.statusGreen,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
           ],
         ),
       ),
@@ -319,7 +483,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           CurrencyFormatter.format(amount),
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        Text('${pct.toStringAsFixed(1)}% of total', style: const TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+        Text('${pct.toStringAsFixed(1)}% of total expenses', style: const TextStyle(fontSize: 11, color: AppColors.textSecondary)),
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../categories/presentation/viewmodels/category_viewmodel.dart';
 import '../../../transactions/data/models/transaction_model.dart';
 import '../../../transactions/domain/entities/transaction_entity.dart';
 import '../../../transactions/domain/repositories/transaction_repository.dart';
@@ -48,7 +49,7 @@ class ReportsViewModel extends ChangeNotifier {
     }
   }
 
-  List<TransactionModel> get filteredTransactions {
+  List<TransactionModel> getFilteredTransactions() {
     final now = DateTime.now();
     return _allTransactions.where((t) {
       final date = DateTime.tryParse(t.date);
@@ -67,25 +68,59 @@ class ReportsViewModel extends ChangeNotifier {
     }).toList();
   }
 
-  double get totalSpentInTimeframe {
-    return filteredTransactions.fold(0.0, (sum, t) => sum + t.amount);
+  /// Get expense transactions only (where category is not income)
+  List<TransactionModel> getExpenseTransactions(CategoryViewModel categoryViewModel) {
+    return getFilteredTransactions().where((t) {
+      final cat = categoryViewModel.getCategoryById(t.categoryId);
+      return cat == null || !cat.isIncome;
+    }).toList();
   }
 
-  double get totalNeedsInTimeframe {
-    return filteredTransactions
+  /// Get income transactions only
+  List<TransactionModel> getIncomeTransactions(CategoryViewModel categoryViewModel) {
+    return getFilteredTransactions().where((t) {
+      final cat = categoryViewModel.getCategoryById(t.categoryId);
+      return cat != null && cat.isIncome;
+    }).toList();
+  }
+
+  double getTotalExpenses(CategoryViewModel categoryViewModel) {
+    return getExpenseTransactions(categoryViewModel)
+        .fold(0.0, (sum, t) => sum + t.amount);
+  }
+
+  double getTotalIncome(CategoryViewModel categoryViewModel) {
+    return getIncomeTransactions(categoryViewModel)
+        .fold(0.0, (sum, t) => sum + t.amount);
+  }
+
+  double getNetCashFlow(CategoryViewModel categoryViewModel) {
+    return getTotalIncome(categoryViewModel) - getTotalExpenses(categoryViewModel);
+  }
+
+  double getNeedsExpenses(CategoryViewModel categoryViewModel) {
+    return getExpenseTransactions(categoryViewModel)
         .where((t) => t.needOrWant == 'Need')
         .fold(0.0, (sum, t) => sum + t.amount);
   }
 
-  double get totalWantsInTimeframe {
-    return filteredTransactions
+  double getWantsExpenses(CategoryViewModel categoryViewModel) {
+    return getExpenseTransactions(categoryViewModel)
         .where((t) => t.needOrWant == 'Want')
         .fold(0.0, (sum, t) => sum + t.amount);
   }
 
-  Map<int, double> get categorySpendingMap {
+  Map<int, double> getExpenseCategoryMap(CategoryViewModel categoryViewModel) {
     final Map<int, double> map = {};
-    for (var t in filteredTransactions) {
+    for (var t in getExpenseTransactions(categoryViewModel)) {
+      map[t.categoryId] = (map[t.categoryId] ?? 0.0) + t.amount;
+    }
+    return map;
+  }
+
+  Map<int, double> getIncomeCategoryMap(CategoryViewModel categoryViewModel) {
+    final Map<int, double> map = {};
+    for (var t in getIncomeTransactions(categoryViewModel)) {
       map[t.categoryId] = (map[t.categoryId] ?? 0.0) + t.amount;
     }
     return map;
