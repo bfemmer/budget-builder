@@ -187,6 +187,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<CategoryViewModel>(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final borderColor = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
 
     return Scaffold(
       appBar: AppBar(
@@ -215,13 +221,26 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [AppColors.airForceBlue, AppColors.navyCard],
+                      gradient: LinearGradient(
+                        colors: isDark
+                            ? [AppColors.airForceBlue, AppColors.navyCard]
+                            : [AppColors.airForceBlue, const Color(0xFF0F2A4A)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.cardBorder),
+                      border: Border.all(
+                        color: isDark
+                            ? AppColors.cardBorder
+                            : AppColors.accentBlue.withValues(alpha: 0.3),
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 8,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +268,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           '${vm.expenseCategories.length} Spending Categories Configured',
                           style: const TextStyle(
                             fontSize: 13,
-                            color: AppColors.textSecondary,
+                            color: Colors.white70,
                           ),
                         ),
                       ],
@@ -278,9 +297,18 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       final cat = vm.expenseCategories[index];
                       return Container(
                         decoration: BoxDecoration(
-                          color: AppColors.navyCard,
+                          color: cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.cardBorder),
+                          border: Border.all(color: borderColor),
+                          boxShadow: isDark
+                              ? null
+                              : [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.03),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
                         ),
                         child: ListTile(
                           leading: Container(
@@ -297,15 +325,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           ),
                           title: Text(
                             cat.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                              color: textPrimary,
                             ),
                           ),
                           subtitle: Text(
                             'Monthly Limit: ${CurrencyFormatter.format(cat.monthlyLimit)}',
-                            style: const TextStyle(
-                              color: AppColors.textSecondary,
+                            style: TextStyle(
+                              color: textSecondary,
                             ),
                           ),
                           trailing: Row(
@@ -385,9 +413,18 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         final cat = vm.incomeCategories[index];
                         return Container(
                           decoration: BoxDecoration(
-                            color: AppColors.navyCard,
+                            color: cardColor,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.cardBorder),
+                            border: Border.all(color: borderColor),
+                            boxShadow: isDark
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.03),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 1),
+                                    ),
+                                  ],
                           ),
                           child: ListTile(
                             leading: Container(
@@ -405,9 +442,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             ),
                             title: Text(
                               cat.name,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
+                                color: textPrimary,
                               ),
                             ),
                             subtitle: const Text(

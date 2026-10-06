@@ -25,6 +25,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget build(BuildContext context) {
     final reportsVm = Provider.of<ReportsViewModel>(context);
     final catVm = Provider.of<CategoryViewModel>(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final borderColor = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
 
     final totalExpenses = reportsVm.getTotalExpenses(catVm);
     final totalIncome = reportsVm.getTotalIncome(catVm);
@@ -52,9 +58,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
             Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: AppColors.navyCard,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.cardBorder),
+                border: Border.all(color: borderColor),
               ),
               child: Row(
                 children: [
@@ -62,16 +68,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     label: '7 Days',
                     isSelected: reportsVm.selectedTimeframe == ReportTimeframe.last7Days,
                     onTap: () => reportsVm.setTimeframe(ReportTimeframe.last7Days),
+                    textColor: textSecondary,
                   ),
                   _buildSegmentButton(
                     label: 'Last Month',
                     isSelected: reportsVm.selectedTimeframe == ReportTimeframe.lastMonth,
                     onTap: () => reportsVm.setTimeframe(ReportTimeframe.lastMonth),
+                    textColor: textSecondary,
                   ),
                   _buildSegmentButton(
                     label: 'Year-to-Date',
                     isSelected: reportsVm.selectedTimeframe == ReportTimeframe.yearToDate,
                     onTap: () => reportsVm.setTimeframe(ReportTimeframe.yearToDate),
+                    textColor: textSecondary,
                   ),
                 ],
               ),
@@ -79,18 +88,22 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
             const SizedBox(height: 20),
 
-            // Income vs Expense Cash Flow Comparison Card
+            // Income vs Expense Cash Flow Comparison Card (Hero Card)
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.airForceBlue, AppColors.navyCard],
+                gradient: LinearGradient(
+                  colors: isDark
+                      ? [AppColors.airForceBlue, AppColors.navyCard]
+                      : [AppColors.airForceBlue, const Color(0xFF0F2A4A)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.cardBorder),
+                border: Border.all(
+                  color: isDark ? AppColors.cardBorder : AppColors.accentBlue.withValues(alpha: 0.3),
+                ),
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
@@ -146,7 +159,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                             children: [
                               Icon(Icons.arrow_downward, color: AppColors.statusGreen, size: 16),
                               SizedBox(width: 4),
-                              Text('TOTAL INCOME', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+                              Text('TOTAL INCOME', style: TextStyle(fontSize: 11, color: Colors.white70)),
                             ],
                           ),
                           const SizedBox(height: 4),
@@ -156,7 +169,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           ),
                         ],
                       ),
-                      Container(height: 36, width: 1, color: AppColors.cardBorder),
+                      Container(height: 36, width: 1, color: Colors.white24),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -164,7 +177,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                             children: [
                               Icon(Icons.arrow_upward, color: AppColors.statusRed, size: 16),
                               SizedBox(width: 4),
-                              Text('TOTAL EXPENSES', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+                              Text('TOTAL EXPENSES', style: TextStyle(fontSize: 11, color: Colors.white70)),
                             ],
                           ),
                           const SizedBox(height: 4),
@@ -178,7 +191,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ),
 
                   const SizedBox(height: 16),
-                  const Divider(color: AppColors.cardBorder, height: 1),
+                  const Divider(color: Colors.white24, height: 1),
                   const SizedBox(height: 12),
 
                   // Net Cash Flow Row
@@ -187,7 +200,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     children: [
                       const Text(
                         'Net Cash Flow (Income - Expenses):',
-                        style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                        style: TextStyle(fontSize: 12, color: Colors.white70),
                       ),
                       Text(
                         '${netCashFlow >= 0 ? '+' : ''}${CurrencyFormatter.format(netCashFlow)}',
@@ -203,7 +216,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   const SizedBox(height: 4),
                   Text(
                     '$expenseCount Expenses • $incomeCount Income Records',
-                    style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                    style: const TextStyle(fontSize: 11, color: Colors.white60),
                   ),
                 ],
               ),
@@ -226,17 +239,26 @@ class _ReportsScreenState extends State<ReportsScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.navyCard,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.cardBorder),
+                border: Border.all(color: borderColor),
+                boxShadow: isDark
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
               ),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildNeedWantMetric('NEEDS (Essential)', needsSpent, totalExpenses, AppColors.tagNeed),
-                      _buildNeedWantMetric('WANTS (Discretionary)', wantsSpent, totalExpenses, AppColors.tagWant),
+                      _buildNeedWantMetric('NEEDS (Essential)', needsSpent, totalExpenses, AppColors.tagNeed, textPrimary, textSecondary),
+                      _buildNeedWantMetric('WANTS (Discretionary)', wantsSpent, totalExpenses, AppColors.tagWant, textPrimary, textSecondary),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -284,14 +306,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: AppColors.navyCard,
+                      color: cardColor,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.cardBorder),
+                      border: Border.all(color: borderColor),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         'No expense transactions for selected timeframe.',
-                        style: TextStyle(color: AppColors.textSecondary),
+                        style: TextStyle(color: textSecondary),
                       ),
                     ),
                   )
@@ -310,9 +332,18 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       return Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: AppColors.navyCard,
+                          color: cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.cardBorder),
+                          border: Border.all(color: borderColor),
+                          boxShadow: isDark
+                              ? null
+                              : [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.03),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,13 +364,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     const SizedBox(width: 8),
                                     Text(
                                       cat?.name ?? 'Category',
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: textPrimary),
                                     ),
                                   ],
                                 ),
                                 Text(
                                   CurrencyFormatter.format(spent),
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: textPrimary),
                                 ),
                               ],
                             ),
@@ -352,7 +383,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     child: LinearProgressIndicator(
                                       value: totalExpenses > 0 ? spent / totalExpenses : 0.0,
                                       minHeight: 8,
-                                      backgroundColor: AppColors.inputBackground,
+                                      backgroundColor: isDark ? AppColors.inputBackground : AppColors.lightInputBackground,
                                       valueColor: AlwaysStoppedAnimation<Color>(color),
                                     ),
                                   ),
@@ -360,7 +391,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                 const SizedBox(width: 12),
                                 Text(
                                   '${percent.toStringAsFixed(1)}%',
-                                  style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                                  style: TextStyle(fontSize: 12, color: textSecondary),
                                 ),
                               ],
                             ),
@@ -396,9 +427,18 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   return Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.navyCard,
+                      color: cardColor,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.cardBorder),
+                      border: Border.all(color: borderColor),
+                      boxShadow: isDark
+                          ? null
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.03),
+                                blurRadius: 4,
+                                offset: const Offset(0, 1),
+                              ),
+                            ],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -420,7 +460,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                             const SizedBox(width: 12),
                             Text(
                               cat?.name ?? 'Income',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold, color: textPrimary),
                             ),
                           ],
                         ),
@@ -448,6 +488,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
+    required Color textColor,
   }) {
     return Expanded(
       child: GestureDetector(
@@ -464,7 +505,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              color: isSelected ? Colors.white : AppColors.textSecondary,
+              color: isSelected ? Colors.white : textColor,
             ),
           ),
         ),
@@ -472,7 +513,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
     );
   }
 
-  Widget _buildNeedWantMetric(String label, double amount, double total, Color color) {
+  Widget _buildNeedWantMetric(
+    String label,
+    double amount,
+    double total,
+    Color color,
+    Color textPrimary,
+    Color textSecondary,
+  ) {
     final pct = total > 0 ? (amount / total) * 100 : 0.0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,9 +529,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
         const SizedBox(height: 4),
         Text(
           CurrencyFormatter.format(amount),
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textPrimary),
         ),
-        Text('${pct.toStringAsFixed(1)}% of total expenses', style: const TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+        Text('${pct.toStringAsFixed(1)}% of total expenses', style: TextStyle(fontSize: 11, color: textSecondary)),
       ],
     );
   }

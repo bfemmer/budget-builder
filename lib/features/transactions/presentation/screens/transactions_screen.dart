@@ -82,17 +82,26 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       return true;
     }).toList();
 
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final modalColor = theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface;
+    final borderColor = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
+    final textMuted = textPrimary.withValues(alpha: 0.45);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Transactions'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.tune, color: AppColors.textSecondary),
+            icon: Icon(Icons.tune, color: textSecondary),
             tooltip: 'Filter Options',
             onPressed: () {
               showModalBottomSheet(
                 context: context,
-                backgroundColor: AppColors.navySurface,
+                backgroundColor: modalColor,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
@@ -103,11 +112,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Filter Transactions',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: textPrimary,
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -116,7 +126,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                           decoration: const InputDecoration(
                             labelText: 'Filter by Category',
                           ),
-                          dropdownColor: AppColors.navyCard,
+                          dropdownColor: cardColor,
                           items: [
                             const DropdownMenuItem<int?>(
                               value: null,
@@ -173,9 +183,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   onChanged: (_) => setState(() {}),
                   decoration: InputDecoration(
                     hintText: 'Search vendor or description...',
-                    prefixIcon: const Icon(
+                    prefixIcon: Icon(
                       Icons.search,
-                      color: AppColors.textSecondary,
+                      color: textSecondary,
                     ),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
@@ -232,17 +242,17 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.receipt_long,
                           size: 64,
-                          color: AppColors.textMuted,
+                          color: textMuted,
                         ),
                         const SizedBox(height: 12),
-                        const Text(
+                        Text(
                           'No transactions recorded yet',
                           style: TextStyle(
                             fontSize: 16,
-                            color: AppColors.textSecondary,
+                            color: textSecondary,
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -270,9 +280,18 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 
                       return Container(
                         decoration: BoxDecoration(
-                          color: AppColors.navyCard,
+                          color: cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.cardBorder),
+                          border: Border.all(color: borderColor),
+                          boxShadow: isDark
+                              ? null
+                              : [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.03),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
                         ),
                         child: ListTile(
                           leading: Container(
@@ -292,9 +311,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                           ),
                           title: Text(
                             t.description,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                              color: textPrimary,
                             ),
                           ),
                           subtitle: Column(
@@ -305,23 +324,23 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                 children: [
                                   Text(
                                     cat?.name ?? 'Category',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 12,
-                                      color: AppColors.textSecondary,
+                                      color: textSecondary,
                                     ),
                                   ),
                                   if (t.vendor.isNotEmpty) ...[
-                                    const Text(
+                                    Text(
                                       ' • ',
                                       style: TextStyle(
-                                        color: AppColors.textMuted,
+                                        color: textMuted,
                                       ),
                                     ),
                                     Text(
                                       t.vendor,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 12,
-                                        color: AppColors.textSecondary,
+                                        color: textSecondary,
                                       ),
                                     ),
                                   ],
@@ -396,7 +415,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                   fontSize: 16,
                                   color: cat?.isIncome == true
                                       ? AppColors.statusGreen
-                                      : Colors.white,
+                                      : textPrimary,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -404,9 +423,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                 DateFormatter.formatShort(
                                   DateFormatter.parseIso(t.date),
                                 ),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 11,
-                                  color: AppColors.textMuted,
+                                  color: textMuted,
                                 ),
                               ),
                             ],
@@ -414,7 +433,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                           onTap: () {
                             showModalBottomSheet(
                               context: context,
-                              backgroundColor: AppColors.navySurface,
+                              backgroundColor: modalColor,
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(20),
@@ -428,7 +447,10 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                       Icons.edit,
                                       color: AppColors.accentBlue,
                                     ),
-                                    title: const Text('Edit Transaction'),
+                                    title: Text(
+                                      'Edit Transaction',
+                                      style: TextStyle(color: textPrimary),
+                                    ),
                                     onTap: () {
                                       Navigator.pop(ctx);
                                       _openAddModal(t);

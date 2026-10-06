@@ -127,6 +127,13 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
   Widget build(BuildContext context) {
     final catVm = Provider.of<CategoryViewModel>(context);
     final isEditing = widget.transaction != null;
+    final theme = Theme.of(context);
+    final modalColor = theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
+    final isDark = theme.brightness == Brightness.dark;
+    final chipBorder = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
 
     return Container(
       padding: EdgeInsets.only(
@@ -135,9 +142,9 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
         top: 20,
         bottom: MediaQuery.of(context).viewInsets.bottom + 20,
       ),
-      decoration: const BoxDecoration(
-        color: AppColors.navySurface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: modalColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: SingleChildScrollView(
         child: Form(
@@ -151,16 +158,16 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                 children: [
                   Text(
                     isEditing ? 'Edit Transaction' : 'Record Transaction',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: textPrimary,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
-                      color: AppColors.textSecondary,
+                      color: textSecondary,
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
@@ -189,7 +196,7 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                           ? catVm.categories.first.id
                           : null),
                 decoration: const InputDecoration(labelText: 'Category'),
-                dropdownColor: AppColors.navyCard,
+                dropdownColor: cardColor,
                 items: catVm.categories.map((cat) {
                   return DropdownMenuItem<int>(
                     value: cat.id,
@@ -204,7 +211,10 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        Text(cat.name, style: const TextStyle(fontSize: 14)),
+                        Text(
+                          cat.name,
+                          style: TextStyle(fontSize: 14, color: textPrimary),
+                        ),
                       ],
                     ),
                   );
@@ -224,12 +234,12 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                       controller: _dateController,
                       readOnly: true,
                       onTap: _pickDate,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         labelText: 'Date of Transaction',
                         suffixIcon: Icon(
                           Icons.calendar_today,
                           size: 18,
-                          color: AppColors.textSecondary,
+                          color: textSecondary,
                         ),
                       ),
                     ),
@@ -263,22 +273,22 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
 
               TextFormField(
                 controller: _vendorController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Vendor / Merchant Name',
                   hintText: 'e.g. DeCA Commissary, AAFES Exchange, Chevron',
-                  prefixIcon: Icon(Icons.store, color: AppColors.textSecondary),
+                  prefixIcon: Icon(Icons.store, color: textSecondary),
                 ),
               ),
 
               const SizedBox(height: 16),
 
               // Payment Type (Cash vs Credit)
-              const Text(
+              Text(
                 'PAYMENT TYPE',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textSecondary,
+                  color: textSecondary,
                   letterSpacing: 1.0,
                 ),
               ),
@@ -295,7 +305,7 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                       side: BorderSide(
                         color: _paymentType == 'Cash'
                             ? AppColors.statusGreen
-                            : AppColors.cardBorder,
+                            : chipBorder,
                       ),
                       onSelected: (selected) {
                         if (selected) setState(() => _paymentType = 'Cash');
@@ -311,7 +321,7 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                       side: BorderSide(
                         color: _paymentType == 'Credit'
                             ? AppColors.tagCredit
-                            : AppColors.cardBorder,
+                            : chipBorder,
                       ),
                       onSelected: (selected) {
                         if (selected) setState(() => _paymentType = 'Credit');
@@ -349,7 +359,7 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                       side: BorderSide(
                         color: _needOrWant == 'Need'
                             ? AppColors.tagNeed
-                            : AppColors.cardBorder,
+                            : chipBorder,
                       ),
                       onSelected: (selected) {
                         if (selected) setState(() => _needOrWant = 'Need');
@@ -370,7 +380,7 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                       side: BorderSide(
                         color: _needOrWant == 'Want'
                             ? AppColors.tagWant
-                            : AppColors.cardBorder,
+                            : chipBorder,
                       ),
                       onSelected: (selected) {
                         if (selected) setState(() => _needOrWant = 'Want');

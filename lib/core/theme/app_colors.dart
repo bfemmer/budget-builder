@@ -14,14 +14,23 @@ class AppColors {
   static const Color statusYellow = Color(0xFFF59E0B); // 50% - 79% limit
   static const Color statusRed = Color(0xFFEF4444);    // 80%+ limit
 
-  // Text Colors
+  // Text Colors (Dark Mode)
   static const Color textPrimary = Color(0xFFF8FAFC);
   static const Color textSecondary = Color(0xFF94A3B8);
   static const Color textMuted = Color(0xFF64748B);
 
-  // Card & Input Decoration
+  // Card & Input Decoration (Dark Mode)
   static const Color cardBorder = Color(0xFF334155);
   static const Color inputBackground = Color(0xFF0F172A);
+
+  // Light Mode Colors
+  static const Color lightBackground = Color(0xFFF8FAFC);
+  static const Color lightCard = Color(0xFFFFFFFF);
+  static const Color lightSurface = Color(0xFFF1F5F9);
+  static const Color lightCardBorder = Color(0xFFE2E8F0);
+  static const Color lightTextPrimary = Color(0xFF0F172A);
+  static const Color lightTextSecondary = Color(0xFF475569);
+  static const Color lightInputBackground = Color(0xFFF1F5F9);
 
   // Classification Tags
   static const Color tagNeed = Color(0xFF3B82F6);

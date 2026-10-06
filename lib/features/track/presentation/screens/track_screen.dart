@@ -58,6 +58,13 @@ class _TrackScreenState extends State<TrackScreen> {
   Widget build(BuildContext context) {
     final catVm = Provider.of<CategoryViewModel>(context);
     final txVm = Provider.of<TransactionViewModel>(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final borderColor = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
+    final textMuted = textPrimary.withValues(alpha: 0.45);
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Spending Tracker')),
@@ -70,9 +77,18 @@ class _TrackScreenState extends State<TrackScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.navyCard,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.cardBorder),
+                border: Border.all(color: borderColor),
+                boxShadow: isDark
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,16 +106,19 @@ class _TrackScreenState extends State<TrackScreen> {
                   _buildLegendItem(
                     color: AppColors.statusGreen,
                     label: 'GREEN – Spending is less than 50% of limit',
+                    textColor: textSecondary,
                   ),
                   const SizedBox(height: 8),
                   _buildLegendItem(
                     color: AppColors.statusYellow,
                     label: 'YELLOW – Spending reached 50% - 79% of limit',
+                    textColor: textSecondary,
                   ),
                   const SizedBox(height: 8),
                   _buildLegendItem(
                     color: AppColors.statusRed,
                     label: 'RED – Spending reached at least 80% of limit',
+                    textColor: textSecondary,
                   ),
                 ],
               ),
@@ -119,7 +138,7 @@ class _TrackScreenState extends State<TrackScreen> {
             const SizedBox(height: 12),
 
             catVm.expenseCategories.isEmpty
-                ? const Center(child: Text('No categories defined'))
+                ? Center(child: Text('No categories defined', style: TextStyle(color: textSecondary)))
                 : ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -142,9 +161,18 @@ class _TrackScreenState extends State<TrackScreen> {
 
                       return Container(
                         decoration: BoxDecoration(
-                          color: AppColors.navyCard,
+                          color: cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.cardBorder),
+                          border: Border.all(color: borderColor),
+                          boxShadow: isDark
+                              ? null
+                              : [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.03),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
                         ),
                         child: ListTile(
                           leading: Container(
@@ -161,16 +189,16 @@ class _TrackScreenState extends State<TrackScreen> {
                           ),
                           title: Text(
                             cat.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                              color: textPrimary,
                             ),
                           ),
                           subtitle: Text(
                             'Spent: ${CurrencyFormatter.format(spent)} / Limit: ${CurrencyFormatter.format(limit)}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.textSecondary,
+                              color: textSecondary,
                             ),
                           ),
                           trailing: Row(
@@ -193,9 +221,9 @@ class _TrackScreenState extends State<TrackScreen> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Icon(
+                              Icon(
                                 Icons.chevron_right,
-                                color: AppColors.textMuted,
+                                color: textMuted,
                               ),
                             ],
                           ),
@@ -218,7 +246,11 @@ class _TrackScreenState extends State<TrackScreen> {
     );
   }
 
-  Widget _buildLegendItem({required Color color, required String label}) {
+  Widget _buildLegendItem({
+    required Color color,
+    required String label,
+    required Color textColor,
+  }) {
     return Row(
       children: [
         Container(
@@ -230,9 +262,9 @@ class _TrackScreenState extends State<TrackScreen> {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
-              color: AppColors.textSecondary,
+              color: textColor,
             ),
           ),
         ),

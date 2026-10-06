@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'core/sqlite/database_helper.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_viewmodel.dart';
 
 // Profile
 import 'features/profile/data/datasources/profile_local_datasource.dart';
@@ -63,6 +64,9 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
+          create: (_) => ThemeViewModel(dbHelper: dbHelper),
+        ),
+        ChangeNotifierProvider(
           create: (_) => ProfileViewModel(repository: profileRepo),
         ),
         ChangeNotifierProvider(
@@ -94,11 +98,17 @@ class BudgetBuilderApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Budget Builder',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
-      home: const MainNavigationWrapper(),
+    return Consumer<ThemeViewModel>(
+      builder: (context, themeVm, child) {
+        return MaterialApp(
+          title: 'Budget Builder',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeVm.themeMode,
+          home: const MainNavigationWrapper(),
+        );
+      },
     );
   }
 }
@@ -127,6 +137,8 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
       const SettingsTabMenu(),
     ];
 
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
@@ -136,9 +148,9 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
         currentIndex: _currentIndex,
         onTap: _onTabSelected,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.navySurface,
+        backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
         selectedItemColor: AppColors.accentBlue,
-        unselectedItemColor: AppColors.textSecondary,
+        unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
@@ -171,11 +183,23 @@ class SettingsTabMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeVm = Provider.of<ThemeViewModel>(context);
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('My Settings'),
+          actions: [
+            IconButton(
+              icon: Icon(
+                themeVm.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                color: AppColors.usafGold,
+              ),
+              tooltip: themeVm.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+              onPressed: () => themeVm.toggleTheme(),
+            ),
+          ],
           bottom: const TabBar(
             indicatorColor: AppColors.accentBlue,
             labelColor: AppColors.accentBlue,

@@ -3,6 +3,7 @@ class DbTables {
   static const String categories = 'categories';
   static const String transactions = 'transactions';
   static const String notifications = 'notifications';
+  static const String settings = 'settings';
 
   static const String createProfileTable = '''
     CREATE TABLE $profile (
@@ -51,6 +52,13 @@ class DbTables {
       category_id INTEGER,
       timestamp TEXT NOT NULL,
       is_read INTEGER NOT NULL DEFAULT 0
+    );
+  ''';
+
+  static const String createSettingsTable = '''
+    CREATE TABLE $settings (
+      key TEXT PRIMARY KEY,
+      value TEXT NOT NULL
     );
   ''';
 

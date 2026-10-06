@@ -14,6 +14,13 @@ class CategoryDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final txVm = Provider.of<TransactionViewModel>(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final borderColor = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
+    final textMuted = textPrimary.withValues(alpha: 0.45);
 
     // Filter transactions for this category in the current month
     final now = DateTime.now();
@@ -47,9 +54,18 @@ class CategoryDetailScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: AppColors.navyCard,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.cardBorder),
+                border: Border.all(color: borderColor),
+                boxShadow: isDark
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.04),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
               ),
               child: Column(
                 children: [
@@ -97,18 +113,18 @@ class CategoryDetailScreen extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          const Text('BUDGET LIMIT', style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                          Text('BUDGET LIMIT', style: TextStyle(fontSize: 11, color: textMuted)),
                           const SizedBox(height: 4),
                           Text(
                             CurrencyFormatter.format(category.monthlyLimit),
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textPrimary),
                           ),
                         ],
                       ),
-                      Container(height: 30, width: 1, color: AppColors.cardBorder),
+                      Container(height: 30, width: 1, color: borderColor),
                       Column(
                         children: [
-                          const Text('SPENT', style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                          Text('SPENT', style: TextStyle(fontSize: 11, color: textMuted)),
                           const SizedBox(height: 4),
                           Text(
                             CurrencyFormatter.format(spent),
@@ -116,10 +132,10 @@ class CategoryDetailScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(height: 30, width: 1, color: AppColors.cardBorder),
+                      Container(height: 30, width: 1, color: borderColor),
                       Column(
                         children: [
-                          const Text('REMAINING', style: TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                          Text('REMAINING', style: TextStyle(fontSize: 11, color: textMuted)),
                           const SizedBox(height: 4),
                           Text(
                             CurrencyFormatter.format(remaining),
@@ -154,14 +170,14 @@ class CategoryDetailScreen extends StatelessWidget {
                 ? Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: AppColors.navyCard,
+                      color: cardColor,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.cardBorder),
+                      border: Border.all(color: borderColor),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         'No transactions recorded for this category this month.',
-                        style: TextStyle(color: AppColors.textSecondary),
+                        style: TextStyle(color: textSecondary),
                       ),
                     ),
                   )
@@ -174,15 +190,15 @@ class CategoryDetailScreen extends StatelessWidget {
                       final t = categoryTx[index];
                       return Container(
                         decoration: BoxDecoration(
-                          color: AppColors.navyCard,
+                          color: cardColor,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.cardBorder),
+                          border: Border.all(color: borderColor),
                         ),
                         child: ListTile(
-                          title: Text(t.description, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          title: Text(t.description, style: TextStyle(fontWeight: FontWeight.bold, color: textPrimary)),
                           subtitle: Text(
                             '${t.vendor.isNotEmpty ? "${t.vendor} • " : ""}${t.paymentType} • ${t.needOrWant}',
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                            style: TextStyle(fontSize: 12, color: textSecondary),
                           ),
                           trailing: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -190,11 +206,11 @@ class CategoryDetailScreen extends StatelessWidget {
                             children: [
                               Text(
                                 CurrencyFormatter.format(t.amount),
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: textPrimary),
                               ),
                               Text(
                                 DateFormatter.formatShort(DateFormatter.parseIso(t.date)),
-                                style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                                style: TextStyle(fontSize: 11, color: textMuted),
                               ),
                             ],
                           ),

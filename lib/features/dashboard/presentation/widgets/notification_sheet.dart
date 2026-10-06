@@ -10,13 +10,21 @@ class NotificationSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<DashboardViewModel>(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final backgroundColor = theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final unreadCardColor = isDark ? AppColors.navyDark : AppColors.lightSurface;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
+    final borderColor = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        color: AppColors.navySurface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,16 +32,16 @@ class NotificationSheet extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.notifications_active, color: AppColors.usafGold),
-                  SizedBox(width: 8),
+                  const Icon(Icons.notifications_active, color: AppColors.usafGold),
+                  const SizedBox(width: 8),
                   Text(
                     'Budget Notifications',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: textPrimary,
                     ),
                   ),
                 ],
@@ -51,19 +59,19 @@ class NotificationSheet extends StatelessWidget {
           const SizedBox(height: 16),
           Expanded(
             child: vm.notifications.isEmpty
-                ? const Center(
+                ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.check_circle_outline,
                           size: 48,
                           color: AppColors.statusGreen,
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         Text(
                           'No active budget alerts',
-                          style: TextStyle(color: AppColors.textSecondary),
+                          style: TextStyle(color: textSecondary),
                         ),
                       ],
                     ),
@@ -75,13 +83,11 @@ class NotificationSheet extends StatelessWidget {
                       final item = vm.notifications[index];
                       return Container(
                         decoration: BoxDecoration(
-                          color: item.isRead
-                              ? AppColors.navyCard
-                              : AppColors.navyDark,
+                          color: item.isRead ? cardColor : unreadCardColor,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: item.isRead
-                                ? AppColors.cardBorder
+                                ? borderColor
                                 : AppColors.statusYellow,
                           ),
                         ),
@@ -92,16 +98,17 @@ class NotificationSheet extends StatelessWidget {
                           ),
                           title: Text(
                             item.title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
+                              color: textPrimary,
                             ),
                           ),
                           subtitle: Text(
                             item.message,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.textSecondary,
+                              color: textSecondary,
                             ),
                           ),
                           trailing: item.isRead

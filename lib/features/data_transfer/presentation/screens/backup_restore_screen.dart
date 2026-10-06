@@ -37,6 +37,13 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
   @override
   Widget build(BuildContext context) {
     final backupVm = Provider.of<BackupViewModel>(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final borderColor = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
+    final inputBg = isDark ? AppColors.inputBackground : AppColors.lightInputBackground;
 
     return Scaffold(
       appBar: AppBar(
@@ -51,13 +58,24 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.airForceBlue, AppColors.navyCard],
+                gradient: LinearGradient(
+                  colors: isDark
+                      ? [AppColors.airForceBlue, AppColors.navyCard]
+                      : [AppColors.airForceBlue, const Color(0xFF0F2A4A)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.cardBorder),
+                border: Border.all(
+                  color: isDark ? AppColors.cardBorder : AppColors.accentBlue.withValues(alpha: 0.3),
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 8,
+                    offset: Offset(0, 3),
+                  ),
+                ],
               ),
               child: const Row(
                 children: [
@@ -79,7 +97,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                         SizedBox(height: 4),
                         Text(
                           'Export your budget data to local JSON or restore previously backed-up files without any cloud dependence.',
-                          style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                          style: TextStyle(fontSize: 12, color: Colors.white70),
                         ),
                       ],
                     ),
@@ -105,16 +123,25 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.navyCard,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.cardBorder),
+                border: Border.all(color: borderColor),
+                boxShadow: isDark
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.03),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Generate full backup JSON containing your profile, custom spending categories, and recorded transactions.',
-                    style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                    style: TextStyle(fontSize: 13, color: textSecondary),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
@@ -143,9 +170,9 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'Exported Content Preview:',
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: textPrimary),
                         ),
                         TextButton.icon(
                           icon: const Icon(Icons.copy, size: 16),
@@ -163,17 +190,17 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                       height: 140,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppColors.inputBackground,
+                        color: inputBg,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.cardBorder),
+                        border: Border.all(color: borderColor),
                       ),
                       child: SingleChildScrollView(
                         child: Text(
                           _exportedJson!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'monospace',
                             fontSize: 11,
-                            color: AppColors.textPrimary,
+                            color: textPrimary,
                           ),
                         ),
                       ),
@@ -200,16 +227,25 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.navyCard,
+                color: cardColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.cardBorder),
+                border: Border.all(color: borderColor),
+                boxShadow: isDark
+                    ? null
+                    : [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.03),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Paste exported JSON backup code below to restore your budget data into the local database.',
-                    style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                    style: TextStyle(fontSize: 13, color: textSecondary),
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -249,7 +285,7 @@ class _BackupRestoreScreenState extends State<BackupRestoreScreen> {
                         } else {
                           messenger.showSnackBar(
                             const SnackBar(
-                              content: Text('Failed to restore data. Check JSON format.'),
+                              content: Text('Failed to restore database. Check JSON syntax.'),
                               backgroundColor: AppColors.statusRed,
                             ),
                           );

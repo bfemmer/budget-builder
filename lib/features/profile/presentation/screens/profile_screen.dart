@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/theme_viewmodel.dart';
 import '../../data/models/profile_model.dart';
 import '../viewmodels/profile_viewmodel.dart';
 
@@ -111,19 +112,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       initialDate: initial,
       firstDate: DateTime(1940),
       lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: AppColors.accentBlue,
-              onPrimary: Colors.white,
-              surface: AppColors.navySurface,
-              onSurface: AppColors.textPrimary,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
     if (picked != null) {
       _dobController.text =
@@ -188,70 +176,178 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Header Banner
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [AppColors.airForceBlue, AppColors.navyCard],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.cardBorder),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: AppColors.accentBlue.withValues(
-                                alpha: 0.2,
+                    Builder(
+                      builder: (context) {
+                        final isDark = Theme.of(context).brightness == Brightness.dark;
+                        return Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: isDark
+                                  ? [AppColors.airForceBlue, AppColors.navyCard]
+                                  : [AppColors.airForceBlue, const Color(0xFF0F2A4A)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: isDark ? AppColors.cardBorder : AppColors.accentBlue.withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.accentBlue.withValues(
+                                    alpha: 0.2,
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.military_tech,
+                                  size: 36,
+                                  color: AppColors.usafGold,
+                                ),
                               ),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.military_tech,
-                              size: 36,
-                              color: AppColors.usafGold,
-                            ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      vm.profile?.fullName.isNotEmpty == true
+                                          ? vm.profile!.fullName
+                                          : 'Airman Profile',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _selectedRank,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: AppColors.usafGold,
+                                      ),
+                                    ),
+                                    Text(
+                                      _dutyStationController.text.isNotEmpty
+                                          ? _dutyStationController.text
+                                          : 'USAF Base / Unit',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  vm.profile?.fullName.isNotEmpty == true
-                                      ? vm.profile!.fullName
-                                      : 'Airman Profile',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  _selectedRank,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: AppColors.usafGold,
-                                  ),
-                                ),
-                                Text(
-                                  _dutyStationController.text.isNotEmpty
-                                      ? _dutyStationController.text
-                                      : 'USAF Base / Unit',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.textSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // App Appearance Theme Card
+                    const Text(
+                      'APP APPEARANCE & THEME',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.accentBlue,
+                        letterSpacing: 1.2,
                       ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    Consumer<ThemeViewModel>(
+                      builder: (context, themeVm, child) {
+                        final theme = Theme.of(context);
+                        final textSecondary = theme.colorScheme.onSurface.withValues(alpha: 0.65);
+                        return Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: theme.cardTheme.color,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: theme.brightness == Brightness.dark
+                                  ? AppColors.cardBorder
+                                  : AppColors.lightCardBorder,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Color Theme',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Select light or dark appearance. Saved persistently to device.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: textSecondary,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ChoiceChip(
+                                      avatar: const Icon(Icons.dark_mode, size: 16),
+                                      label: const Center(child: Text('Dark')),
+                                      selected: themeVm.themeMode == ThemeMode.dark,
+                                      selectedColor: AppColors.accentBlue.withValues(alpha: 0.3),
+                                      onSelected: (selected) {
+                                        if (selected) {
+                                          themeVm.setThemeMode(ThemeMode.dark);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: ChoiceChip(
+                                      avatar: const Icon(Icons.light_mode, size: 16),
+                                      label: const Center(child: Text('Light')),
+                                      selected: themeVm.themeMode == ThemeMode.light,
+                                      selectedColor: AppColors.accentBlue.withValues(alpha: 0.3),
+                                      onSelected: (selected) {
+                                        if (selected) {
+                                          themeVm.setThemeMode(ThemeMode.light);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: ChoiceChip(
+                                      avatar: const Icon(Icons.settings_suggest, size: 16),
+                                      label: const Center(child: Text('System')),
+                                      selected: themeVm.themeMode == ThemeMode.system,
+                                      selectedColor: AppColors.accentBlue.withValues(alpha: 0.3),
+                                      onSelected: (selected) {
+                                        if (selected) {
+                                          themeVm.setThemeMode(ThemeMode.system);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
 
                     const SizedBox(height: 24),
@@ -302,7 +398,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Rank / Paygrade',
                       ),
-                      dropdownColor: AppColors.navySurface,
+                      dropdownColor: Theme.of(context).cardTheme.color,
                       items: _usafRanks.map((rank) {
                         return DropdownMenuItem(
                           value: rank,
@@ -342,7 +438,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             decoration: const InputDecoration(
                               labelText: 'Gender',
                             ),
-                            dropdownColor: AppColors.navySurface,
+                            dropdownColor: Theme.of(context).cardTheme.color,
                             items: _genders.map((g) {
                               return DropdownMenuItem(
                                 value: g,
@@ -387,7 +483,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Family Size / Household',
                       ),
-                      dropdownColor: AppColors.navySurface,
+                      dropdownColor: Theme.of(context).cardTheme.color,
                       items: _familySizes.map((f) {
                         return DropdownMenuItem(
                           value: f,
