@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/date_formatter.dart';
 import '../../../categories/presentation/viewmodels/category_viewmodel.dart';
@@ -16,7 +17,8 @@ class AddEditTransactionModal extends StatefulWidget {
   });
 
   @override
-  State<AddEditTransactionModal> createState() => _AddEditTransactionModalState();
+  State<AddEditTransactionModal> createState() =>
+      _AddEditTransactionModalState();
 }
 
 class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
@@ -29,7 +31,7 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
 
   int? _selectedCategoryId;
   String _paymentType = 'Cash'; // Cash or Credit
-  String _needOrWant = 'Need';   // Need or Want
+  String _needOrWant = 'Need'; // Need or Want
 
   @override
   void initState() {
@@ -99,9 +101,9 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedCategoryId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a category')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please select a category')));
       return;
     }
 
@@ -156,7 +158,10 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, color: AppColors.textSecondary),
+                    icon: const Icon(
+                      Icons.close,
+                      color: AppColors.textSecondary,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -169,15 +174,20 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                   labelText: 'Transaction Description',
                   hintText: 'e.g. Weekly Groceries, Fuel, Movie Ticket',
                 ),
-                validator: (val) => val == null || val.trim().isEmpty ? 'Enter description' : null,
+                validator: (val) => val == null || val.trim().isEmpty
+                    ? 'Enter description'
+                    : null,
               ),
 
               const SizedBox(height: 16),
 
               DropdownButtonFormField<int>(
-                value: catVm.categories.any((c) => c.id == _selectedCategoryId)
+                initialValue:
+                    catVm.categories.any((c) => c.id == _selectedCategoryId)
                     ? _selectedCategoryId
-                    : (catVm.categories.isNotEmpty ? catVm.categories.first.id : null),
+                    : (catVm.categories.isNotEmpty
+                          ? catVm.categories.first.id
+                          : null),
                 decoration: const InputDecoration(labelText: 'Category'),
                 dropdownColor: AppColors.navyCard,
                 items: catVm.categories.map((cat) {
@@ -216,7 +226,11 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                       onTap: _pickDate,
                       decoration: const InputDecoration(
                         labelText: 'Date of Transaction',
-                        suffixIcon: Icon(Icons.calendar_today, size: 18, color: AppColors.textSecondary),
+                        suffixIcon: Icon(
+                          Icons.calendar_today,
+                          size: 18,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                     ),
                   ),
@@ -224,14 +238,20 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                   Expanded(
                     child: TextFormField(
                       controller: _amountController,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       decoration: const InputDecoration(
                         labelText: 'Amount (\$)',
                         prefixText: '\$ ',
                       ),
                       validator: (val) {
-                        if (val == null || val.trim().isEmpty) return 'Enter amount';
-                        if (double.tryParse(val.trim()) == null) return 'Invalid amount';
+                        if (val == null || val.trim().isEmpty) {
+                          return 'Enter amount';
+                        }
+                        if (double.tryParse(val.trim()) == null) {
+                          return 'Invalid amount';
+                        }
                         return null;
                       },
                     ),
@@ -269,9 +289,13 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                     child: ChoiceChip(
                       label: const Center(child: Text('Cash / Debit')),
                       selected: _paymentType == 'Cash',
-                      selectedColor: AppColors.statusGreen.withOpacity(0.3),
+                      selectedColor: AppColors.statusGreen.withValues(
+                        alpha: 0.3,
+                      ),
                       side: BorderSide(
-                        color: _paymentType == 'Cash' ? AppColors.statusGreen : AppColors.cardBorder,
+                        color: _paymentType == 'Cash'
+                            ? AppColors.statusGreen
+                            : AppColors.cardBorder,
                       ),
                       onSelected: (selected) {
                         if (selected) setState(() => _paymentType = 'Cash');
@@ -283,9 +307,11 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                     child: ChoiceChip(
                       label: const Center(child: Text('Credit Card')),
                       selected: _paymentType == 'Credit',
-                      selectedColor: AppColors.tagCredit.withOpacity(0.3),
+                      selectedColor: AppColors.tagCredit.withValues(alpha: 0.3),
                       side: BorderSide(
-                        color: _paymentType == 'Credit' ? AppColors.tagCredit : AppColors.cardBorder,
+                        color: _paymentType == 'Credit'
+                            ? AppColors.tagCredit
+                            : AppColors.cardBorder,
                       ),
                       onSelected: (selected) {
                         if (selected) setState(() => _paymentType = 'Credit');
@@ -313,12 +339,17 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                   Expanded(
                     child: ChoiceChip(
                       label: const Center(
-                        child: Text('NEED (Essential)', style: TextStyle(fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'NEED (Essential)',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       selected: _needOrWant == 'Need',
-                      selectedColor: AppColors.tagNeed.withOpacity(0.3),
+                      selectedColor: AppColors.tagNeed.withValues(alpha: 0.3),
                       side: BorderSide(
-                        color: _needOrWant == 'Need' ? AppColors.tagNeed : AppColors.cardBorder,
+                        color: _needOrWant == 'Need'
+                            ? AppColors.tagNeed
+                            : AppColors.cardBorder,
                       ),
                       onSelected: (selected) {
                         if (selected) setState(() => _needOrWant = 'Need');
@@ -329,12 +360,17 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                   Expanded(
                     child: ChoiceChip(
                       label: const Center(
-                        child: Text('WANT (Discretionary)', style: TextStyle(fontWeight: FontWeight.bold)),
+                        child: Text(
+                          'WANT (Discretionary)',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       selected: _needOrWant == 'Want',
-                      selectedColor: AppColors.tagWant.withOpacity(0.3),
+                      selectedColor: AppColors.tagWant.withValues(alpha: 0.3),
                       side: BorderSide(
-                        color: _needOrWant == 'Want' ? AppColors.tagWant : AppColors.cardBorder,
+                        color: _needOrWant == 'Want'
+                            ? AppColors.tagWant
+                            : AppColors.cardBorder,
                       ),
                       onSelected: (selected) {
                         if (selected) setState(() => _needOrWant = 'Want');
@@ -350,7 +386,9 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.check_circle),
-                  label: Text(isEditing ? 'UPDATE TRANSACTION' : 'ADD TRANSACTION'),
+                  label: Text(
+                    isEditing ? 'UPDATE TRANSACTION' : 'ADD TRANSACTION',
+                  ),
                   onPressed: _submit,
                 ),
               ),

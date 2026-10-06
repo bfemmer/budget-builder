@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../categories/presentation/viewmodels/category_viewmodel.dart';
@@ -19,23 +20,37 @@ class _TrackScreenState extends State<TrackScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final catVm = Provider.of<CategoryViewModel>(context, listen: false);
-      Provider.of<TransactionViewModel>(context, listen: false).loadTransactions(catVm);
+      Provider.of<TransactionViewModel>(
+        context,
+        listen: false,
+      ).loadTransactions(catVm);
     });
   }
 
   IconData _getIconData(String name) {
     switch (name) {
-      case 'fastfood': return Icons.fastfood;
-      case 'receipt_long': return Icons.receipt_long;
-      case 'directions_car': return Icons.directions_car;
-      case 'shopping_bag': return Icons.shopping_bag;
-      case 'movie': return Icons.movie;
-      case 'school': return Icons.school;
-      case 'fitness_center': return Icons.fitness_center;
-      case 'spa': return Icons.spa;
-      case 'flight': return Icons.flight;
-      case 'account_balance_wallet': return Icons.account_balance_wallet;
-      default: return Icons.category;
+      case 'fastfood':
+        return Icons.fastfood;
+      case 'receipt_long':
+        return Icons.receipt_long;
+      case 'directions_car':
+        return Icons.directions_car;
+      case 'shopping_bag':
+        return Icons.shopping_bag;
+      case 'movie':
+        return Icons.movie;
+      case 'school':
+        return Icons.school;
+      case 'fitness_center':
+        return Icons.fitness_center;
+      case 'spa':
+        return Icons.spa;
+      case 'flight':
+        return Icons.flight;
+      case 'account_balance_wallet':
+        return Icons.account_balance_wallet;
+      default:
+        return Icons.category;
     }
   }
 
@@ -45,9 +60,7 @@ class _TrackScreenState extends State<TrackScreen> {
     final txVm = Provider.of<TransactionViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Spending Tracker'),
-      ),
+      appBar: AppBar(title: const Text('My Spending Tracker')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -114,7 +127,9 @@ class _TrackScreenState extends State<TrackScreen> {
                     separatorBuilder: (_, _) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
                       final cat = catVm.expenseCategories[index];
-                      final double spent = cat.id != null ? txVm.getSpentForCategory(cat.id!) : 0.0;
+                      final double spent = cat.id != null
+                          ? txVm.getSpentForCategory(cat.id!)
+                          : 0.0;
                       final double limit = cat.monthlyLimit;
                       final double ratio = limit > 0 ? spent / limit : 0.0;
 
@@ -135,7 +150,8 @@ class _TrackScreenState extends State<TrackScreen> {
                           leading: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Color(cat.colorValue).withOpacity(0.2),
+                              color: Color(cat.colorValue)
+                                  .withValues(alpha: 0.2),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -152,7 +168,10 @@ class _TrackScreenState extends State<TrackScreen> {
                           ),
                           subtitle: Text(
                             'Spent: ${CurrencyFormatter.format(spent)} / Limit: ${CurrencyFormatter.format(limit)}',
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: AppColors.textSecondary,
+                            ),
                           ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -165,21 +184,27 @@ class _TrackScreenState extends State<TrackScreen> {
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: indicatorColor.withOpacity(0.6),
+                                      color: indicatorColor.withValues(
+                                        alpha: 0.6,
+                                      ),
                                       blurRadius: 6,
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Icon(Icons.chevron_right, color: AppColors.textMuted),
+                              const Icon(
+                                Icons.chevron_right,
+                                color: AppColors.textMuted,
+                              ),
                             ],
                           ),
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => CategoryDetailScreen(category: cat),
+                                builder: (_) =>
+                                    CategoryDetailScreen(category: cat),
                               ),
                             );
                           },
@@ -199,16 +224,16 @@ class _TrackScreenState extends State<TrackScreen> {
         Container(
           width: 14,
           height: 14,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 10),
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.textSecondary,
+            ),
           ),
         ),
       ],

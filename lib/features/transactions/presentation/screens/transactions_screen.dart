@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../core/utils/date_formatter.dart';
@@ -25,7 +26,10 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final catVm = Provider.of<CategoryViewModel>(context, listen: false);
-      Provider.of<TransactionViewModel>(context, listen: false).loadTransactions(catVm);
+      Provider.of<TransactionViewModel>(
+        context,
+        listen: false,
+      ).loadTransactions(catVm);
     });
   }
 
@@ -101,12 +105,17 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       children: [
                         const Text(
                           'Filter Transactions',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<int?>(
-                          value: _filterCategoryId,
-                          decoration: const InputDecoration(labelText: 'Filter by Category'),
+                          initialValue: _filterCategoryId,
+                          decoration: const InputDecoration(
+                            labelText: 'Filter by Category',
+                          ),
                           dropdownColor: AppColors.navyCard,
                           items: [
                             const DropdownMenuItem<int?>(
@@ -164,11 +173,15 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   onChanged: (_) => setState(() {}),
                   decoration: InputDecoration(
                     hintText: 'Search vendor or description...',
-                    prefixIcon: const Icon(Icons.search, color: AppColors.textSecondary),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: AppColors.textSecondary,
+                    ),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
                             icon: const Icon(Icons.clear, size: 18),
-                            onPressed: () => setState(() => _searchController.clear()),
+                            onPressed: () =>
+                                setState(() => _searchController.clear()),
                           )
                         : null,
                   ),
@@ -181,22 +194,27 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                       FilterChip(
                         label: const Text('All'),
                         selected: _filterNeedWant == null,
-                        selectedColor: AppColors.accentBlue.withOpacity(0.3),
-                        onSelected: (_) => setState(() => _filterNeedWant = null),
+                        selectedColor: AppColors.accentBlue.withValues(
+                          alpha: 0.3,
+                        ),
+                        onSelected: (_) =>
+                            setState(() => _filterNeedWant = null),
                       ),
                       const SizedBox(width: 8),
                       FilterChip(
                         label: const Text('Needs Only'),
                         selected: _filterNeedWant == 'Need',
-                        selectedColor: AppColors.tagNeed.withOpacity(0.3),
-                        onSelected: (_) => setState(() => _filterNeedWant = 'Need'),
+                        selectedColor: AppColors.tagNeed.withValues(alpha: 0.3),
+                        onSelected: (_) =>
+                            setState(() => _filterNeedWant = 'Need'),
                       ),
                       const SizedBox(width: 8),
                       FilterChip(
                         label: const Text('Wants Only'),
                         selected: _filterNeedWant == 'Want',
-                        selectedColor: AppColors.tagWant.withOpacity(0.3),
-                        onSelected: (_) => setState(() => _filterNeedWant = 'Want'),
+                        selectedColor: AppColors.tagWant.withValues(alpha: 0.3),
+                        onSelected: (_) =>
+                            setState(() => _filterNeedWant = 'Want'),
                       ),
                     ],
                   ),
@@ -210,206 +228,241 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             child: txVm.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : filtered.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.receipt_long,
-                              size: 64,
-                              color: AppColors.textMuted,
-                            ),
-                            const SizedBox(height: 12),
-                            const Text(
-                              'No transactions recorded yet',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            ElevatedButton.icon(
-                              icon: const Icon(Icons.add),
-                              label: const Text('Record First Transaction'),
-                              onPressed: () => _openAddModal(),
-                            ),
-                          ],
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.receipt_long,
+                          size: 64,
+                          color: AppColors.textMuted,
                         ),
-                      )
-                    : ListView.separated(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        itemCount: filtered.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          final t = filtered[index];
-                          final cat = catVm.getCategoryById(t.categoryId);
-                          final catColor = cat != null ? Color(cat.colorValue) : AppColors.accentBlue;
+                        const SizedBox(height: 12),
+                        const Text(
+                          'No transactions recorded yet',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                          icon: const Icon(Icons.add),
+                          label: const Text('Record First Transaction'),
+                          onPressed: () => _openAddModal(),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    itemCount: filtered.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      final t = filtered[index];
+                      final cat = catVm.getCategoryById(t.categoryId);
+                      final catColor = cat != null
+                          ? Color(cat.colorValue)
+                          : AppColors.accentBlue;
 
-                          return Container(
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.navyCard,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.cardBorder),
+                        ),
+                        child: ListTile(
+                          leading: Container(
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: AppColors.navyCard,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: AppColors.cardBorder),
+                              color: catColor.withValues(alpha: 0.2),
+                              shape: BoxShape.circle,
                             ),
-                            child: ListTile(
-                              leading: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: catColor.withOpacity(0.2),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                cat?.isIncome == true
-                                    ? Icons.arrow_downward
-                                    : Icons.arrow_upward,
-                                color: cat?.isIncome == true
-                                    ? AppColors.statusGreen
-                                    : catColor,
-                              ),
+                            child: Icon(
+                              cat?.isIncome == true
+                                  ? Icons.arrow_downward
+                                  : Icons.arrow_upward,
+                              color: cat?.isIncome == true
+                                  ? AppColors.statusGreen
+                                  : catColor,
                             ),
-                            title: Text(
-                              t.description,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
-                              ),
+                          ),
+                          title: Text(
+                            t.description,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
                             ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Text(
+                                    cat?.name ?? 'Category',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.textSecondary,
+                                    ),
+                                  ),
+                                  if (t.vendor.isNotEmpty) ...[
+                                    const Text(
+                                      ' • ',
+                                      style: TextStyle(
+                                        color: AppColors.textMuted,
+                                      ),
+                                    ),
                                     Text(
-                                      cat?.name ?? 'Category',
+                                      t.vendor,
                                       style: const TextStyle(
                                         fontSize: 12,
                                         color: AppColors.textSecondary,
                                       ),
                                     ),
-                                    if (t.vendor.isNotEmpty) ...[
-                                      const Text(' • ', style: TextStyle(color: AppColors.textMuted)),
-                                      Text(
-                                        t.vendor,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: AppColors.textSecondary,
-                                        ),
-                                      ),
-                                    ],
                                   ],
-                                ),
-                                const SizedBox(height: 6),
-                                Row(
-                                  children: [
-                                    // Need/Want Tag
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                      decoration: BoxDecoration(
-                                        color: (t.needOrWant == 'Need'
-                                                ? AppColors.tagNeed
-                                                : AppColors.tagWant)
-                                            .withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Text(
-                                        t.needOrWant.toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                          color: t.needOrWant == 'Need'
-                                              ? AppColors.tagNeed
-                                              : AppColors.tagWant,
-                                        ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              Row(
+                                children: [
+                                  // Need/Want Tag
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          (t.needOrWant == 'Need'
+                                                  ? AppColors.tagNeed
+                                                  : AppColors.tagWant)
+                                              .withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Text(
+                                      t.needOrWant.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        color: t.needOrWant == 'Need'
+                                            ? AppColors.tagNeed
+                                            : AppColors.tagWant,
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
-                                    // Payment Type Tag
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                      decoration: BoxDecoration(
-                                        color: (t.paymentType == 'Credit'
-                                                ? AppColors.tagCredit
-                                                : AppColors.tagCash)
-                                            .withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Text(
-                                        t.paymentType.toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                          color: t.paymentType == 'Credit'
-                                              ? AppColors.tagCredit
-                                              : AppColors.tagCash,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  CurrencyFormatter.format(t.amount),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: cat?.isIncome == true
-                                        ? AppColors.statusGreen
-                                        : Colors.white,
                                   ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  DateFormatter.formatShort(
-                                      DateFormatter.parseIso(t.date)),
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    color: AppColors.textMuted,
+                                  const SizedBox(width: 8),
+                                  // Payment Type Tag
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          (t.paymentType == 'Credit'
+                                                  ? AppColors.tagCredit
+                                                  : AppColors.tagCash)
+                                              .withValues(alpha: 0.2),
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Text(
+                                      t.paymentType.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        color: t.paymentType == 'Credit'
+                                            ? AppColors.tagCredit
+                                            : AppColors.tagCash,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                backgroundColor: AppColors.navySurface,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                                ),
-                                builder: (ctx) => Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListTile(
-                                      leading: const Icon(Icons.edit, color: AppColors.accentBlue),
-                                      title: const Text('Edit Transaction'),
-                                      onTap: () {
-                                        Navigator.pop(ctx);
-                                        _openAddModal(t);
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: const Icon(Icons.delete, color: AppColors.statusRed),
-                                      title: const Text('Delete Transaction', style: TextStyle(color: AppColors.statusRed)),
-                                      onTap: () async {
-                                        Navigator.pop(ctx);
-                                        if (t.id != null) {
-                                          await txVm.deleteTransaction(t.id!, catVm);
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                                ],
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                CurrencyFormatter.format(t.amount),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: cat?.isIncome == true
+                                      ? AppColors.statusGreen
+                                      : Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                DateFormatter.formatShort(
+                                  DateFormatter.parseIso(t.date),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  color: AppColors.textMuted,
+                                ),
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: AppColors.navySurface,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
+                                ),
+                              ),
+                              builder: (ctx) => Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListTile(
+                                    leading: const Icon(
+                                      Icons.edit,
+                                      color: AppColors.accentBlue,
+                                    ),
+                                    title: const Text('Edit Transaction'),
+                                    onTap: () {
+                                      Navigator.pop(ctx);
+                                      _openAddModal(t);
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: const Icon(
+                                      Icons.delete,
+                                      color: AppColors.statusRed,
+                                    ),
+                                    title: const Text(
+                                      'Delete Transaction',
+                                      style: TextStyle(
+                                        color: AppColors.statusRed,
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      Navigator.pop(ctx);
+                                      if (t.id != null) {
+                                        await txVm.deleteTransaction(
+                                          t.id!,
+                                          catVm,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
           ),
         ],
       ),

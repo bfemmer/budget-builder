@@ -285,7 +285,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           leading: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Color(cat.colorValue).withOpacity(0.2),
+                              color: Color(cat.colorValue)
+                                  .withValues(alpha: 0.2),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -391,7 +392,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             leading: Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: AppColors.statusGreen.withOpacity(0.2),
+                                color: AppColors.statusGreen.withValues(
+                                  alpha: 0.2,
+                                ),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(

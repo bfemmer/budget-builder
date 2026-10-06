@@ -183,7 +183,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 (remaining >= 0
                                         ? AppColors.statusGreen
                                         : AppColors.statusRed)
-                                    .withOpacity(0.2),
+                                    .withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -521,7 +521,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     (cat != null
                                             ? Color(cat.colorValue)
                                             : AppColors.accentBlue)
-                                        .withOpacity(0.2),
+                                        .withValues(alpha: 0.2),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -578,9 +578,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               shape: BoxShape.circle,
-              border: Border.all(color: color.withOpacity(0.4)),
+              border: Border.all(color: color.withValues(alpha: 0.4)),
             ),
             child: Icon(icon, color: color, size: 28),
           ),

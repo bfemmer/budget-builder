@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/profile_model.dart';
 import '../viewmodels/profile_viewmodel.dart';
@@ -85,7 +86,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (_usafRanks.contains(p.rank)) _selectedRank = p.rank;
       if (_genders.contains(p.gender)) _selectedGender = p.gender;
-      if (_familySizes.contains(p.familySize)) _selectedFamilySize = p.familySize;
+      if (_familySizes.contains(p.familySize)) {
+        _selectedFamilySize = p.familySize;
+      }
       setState(() {});
     }
   }
@@ -101,7 +104,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _selectDate() async {
-    DateTime initial = DateTime.tryParse(_dobController.text) ?? DateTime(1995, 6, 29);
+    DateTime initial =
+        DateTime.tryParse(_dobController.text) ?? DateTime(1995, 6, 29);
     final picked = await showDatePicker(
       context: context,
       initialDate: initial,
@@ -122,7 +126,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
     if (picked != null) {
-      _dobController.text = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+      _dobController.text =
+          "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
     }
   }
 
@@ -146,8 +151,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(success ? 'Profile updated successfully!' : 'Error saving profile.'),
-          backgroundColor: success ? AppColors.statusGreen : AppColors.statusRed,
+          content: Text(
+            success ? 'Profile updated successfully!' : 'Error saving profile.',
+          ),
+          backgroundColor: success
+              ? AppColors.statusGreen
+              : AppColors.statusRed,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -195,7 +204,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.accentBlue.withOpacity(0.2),
+                              color: AppColors.accentBlue.withValues(
+                                alpha: 0.2,
+                              ),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -261,16 +272,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Expanded(
                           child: TextFormField(
                             controller: _firstNameController,
-                            decoration: const InputDecoration(labelText: 'First Name'),
-                            validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                            decoration: const InputDecoration(
+                              labelText: 'First Name',
+                            ),
+                            validator: (val) =>
+                                val == null || val.isEmpty ? 'Required' : null,
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: TextFormField(
                             controller: _lastNameController,
-                            decoration: const InputDecoration(labelText: 'Last Name'),
-                            validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                            decoration: const InputDecoration(
+                              labelText: 'Last Name',
+                            ),
+                            validator: (val) =>
+                                val == null || val.isEmpty ? 'Required' : null,
                           ),
                         ),
                       ],
@@ -279,13 +296,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 16),
 
                     DropdownButtonFormField<String>(
-                      value: _usafRanks.contains(_selectedRank) ? _selectedRank : _usafRanks.first,
-                      decoration: const InputDecoration(labelText: 'Rank / Paygrade'),
+                      initialValue: _usafRanks.contains(_selectedRank)
+                          ? _selectedRank
+                          : _usafRanks.first,
+                      decoration: const InputDecoration(
+                        labelText: 'Rank / Paygrade',
+                      ),
                       dropdownColor: AppColors.navySurface,
                       items: _usafRanks.map((rank) {
                         return DropdownMenuItem(
                           value: rank,
-                          child: Text(rank, style: const TextStyle(fontSize: 14)),
+                          child: Text(
+                            rank,
+                            style: const TextStyle(fontSize: 14),
+                          ),
                         );
                       }).toList(),
                       onChanged: (val) {
@@ -299,7 +323,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       controller: _dutyStationController,
                       decoration: const InputDecoration(
                         labelText: 'Duty Station / Base',
-                        prefixIcon: Icon(Icons.location_on, color: AppColors.textSecondary),
+                        prefixIcon: Icon(
+                          Icons.location_on,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                     ),
 
@@ -309,17 +336,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Expanded(
                           child: DropdownButtonFormField<String>(
-                            value: _genders.contains(_selectedGender) ? _selectedGender : _genders.first,
-                            decoration: const InputDecoration(labelText: 'Gender'),
+                            initialValue: _genders.contains(_selectedGender)
+                                ? _selectedGender
+                                : _genders.first,
+                            decoration: const InputDecoration(
+                              labelText: 'Gender',
+                            ),
                             dropdownColor: AppColors.navySurface,
                             items: _genders.map((g) {
                               return DropdownMenuItem(
                                 value: g,
-                                child: Text(g, style: const TextStyle(fontSize: 14)),
+                                child: Text(
+                                  g,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
                               );
                             }).toList(),
                             onChanged: (val) {
-                              if (val != null) setState(() => _selectedGender = val);
+                              if (val != null) {
+                                setState(() => _selectedGender = val);
+                              }
                             },
                           ),
                         ),
@@ -331,7 +367,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onTap: _selectDate,
                             decoration: const InputDecoration(
                               labelText: 'Date of Birth',
-                              suffixIcon: Icon(Icons.calendar_today, size: 18, color: AppColors.textSecondary),
+                              suffixIcon: Icon(
+                                Icons.calendar_today,
+                                size: 18,
+                                color: AppColors.textSecondary,
+                              ),
                             ),
                           ),
                         ),
@@ -341,8 +381,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 16),
 
                     DropdownButtonFormField<String>(
-                      value: _familySizes.contains(_selectedFamilySize) ? _selectedFamilySize : _familySizes.first,
-                      decoration: const InputDecoration(labelText: 'Family Size / Household'),
+                      initialValue: _familySizes.contains(_selectedFamilySize)
+                          ? _selectedFamilySize
+                          : _familySizes.first,
+                      decoration: const InputDecoration(
+                        labelText: 'Family Size / Household',
+                      ),
                       dropdownColor: AppColors.navySurface,
                       items: _familySizes.map((f) {
                         return DropdownMenuItem(
@@ -351,7 +395,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       }).toList(),
                       onChanged: (val) {
-                        if (val != null) setState(() => _selectedFamilySize = val);
+                        if (val != null) {
+                          setState(() => _selectedFamilySize = val);
+                        }
                       },
                     ),
 
@@ -362,7 +408,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         labelText: 'Email Address (Confidential)',
-                        prefixIcon: Icon(Icons.email, color: AppColors.textSecondary),
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                     ),
 
