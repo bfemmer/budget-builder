@@ -81,7 +81,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
-    final borderColor = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
+    final borderColor = isDark
+        ? AppColors.cardBorder
+        : AppColors.lightCardBorder;
     final textPrimary = theme.colorScheme.onSurface;
     final textSecondary = textPrimary.withValues(alpha: 0.65);
 
@@ -93,7 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(width: 8),
             Text(
               profileVm.profile?.lastName.isNotEmpty == true
-                  ? 'Welcome, ${profileVm.profile!.rank.split(' ').first} ${profileVm.profile!.lastName}'
+                  ? 'Welcome, ${profileVm.profile!.firstName} ${profileVm.profile!.lastName}'
                   : 'Budget Builder',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
@@ -103,10 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Stack(
             children: [
               IconButton(
-                icon: Icon(
-                  Icons.notifications_none,
-                  color: textPrimary,
-                ),
+                icon: Icon(Icons.notifications_none, color: textPrimary),
                 onPressed: _showNotificationsModal,
               ),
               if (dashVm.unreadCount > 0)
@@ -159,7 +158,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: isDark ? AppColors.cardBorder : AppColors.accentBlue.withValues(alpha: 0.3),
+                    color: isDark
+                        ? AppColors.cardBorder
+                        : AppColors.accentBlue.withValues(alpha: 0.3),
                   ),
                   boxShadow: const [
                     BoxShadow(
@@ -547,7 +548,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ? null
                                 : [
                                     BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.03),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.03,
+                                      ),
                                       blurRadius: 4,
                                       offset: const Offset(0, 1),
                                     ),
