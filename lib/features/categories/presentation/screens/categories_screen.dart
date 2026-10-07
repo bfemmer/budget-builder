@@ -31,124 +31,153 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     bool isIncome = category?.isIncome ?? false;
     int selectedColor = category?.colorValue ?? 0xFF0066FF;
 
+    final theme = Theme.of(context);
+    final modalColor =
+        theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.navySurface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
+      backgroundColor: Colors.transparent,
       builder: (ctx) {
         return StatefulBuilder(
           builder: (context, setModalState) {
-            return Padding(
+            return Container(
               padding: EdgeInsets.only(
                 left: 20,
                 right: 20,
                 top: 20,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 20,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        isEditing ? 'Edit Spending Limit' : 'Add Category',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+              decoration: BoxDecoration(
+                color: modalColor,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(24),
+                ),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          isEditing ? 'Edit Spending Limit' : 'Add Category',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: textPrimary,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            color: textSecondary,
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: nameController,
+                      style: TextStyle(color: textPrimary),
+                      decoration: InputDecoration(
+                        labelText: 'Category Name',
+                        labelStyle: TextStyle(color: textSecondary),
+                        hintText: 'e.g. Dining Out, Groceries',
+                        hintStyle: TextStyle(
+                          color: textSecondary.withValues(alpha: 0.5),
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: AppColors.textSecondary,
-                        ),
-                        onPressed: () => Navigator.pop(context),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: limitController,
+                      style: TextStyle(color: textPrimary),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Category Name',
-                      hintText: 'e.g. Dining Out, Groceries',
+                      decoration: InputDecoration(
+                        labelText: 'Monthly Limit (\$)',
+                        labelStyle: TextStyle(color: textSecondary),
+                        hintText: '0.00',
+                        hintStyle: TextStyle(
+                          color: textSecondary.withValues(alpha: 0.5),
+                        ),
+                        prefixText: '\$ ',
+                        prefixStyle: TextStyle(color: textPrimary),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: limitController,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    decoration: const InputDecoration(
-                      labelText: 'Monthly Limit (\$)',
-                      hintText: '0.00',
-                      prefixText: '\$ ',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  SwitchListTile(
-                    title: const Text('Income Category'),
-                    subtitle: const Text(
-                      'Check if this represents an income source',
-                    ),
-                    value: isIncome,
-                    activeThumbColor: AppColors.statusGreen,
-                    onChanged: (val) {
-                      setModalState(() => isIncome = val);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final name = nameController.text.trim();
-                        final limit =
-                            double.tryParse(limitController.text.trim()) ?? 0.0;
-                        if (name.isEmpty) return;
-
-                        final vm = Provider.of<CategoryViewModel>(
-                          context,
-                          listen: false,
-                        );
-                        if (isEditing) {
-                          await vm.updateCategory(
-                            category.copyWith(
-                              name: name,
-                              monthlyLimit: limit,
-                              isIncome: isIncome,
-                              colorValue: selectedColor,
-                            ),
-                          );
-                        } else {
-                          await vm.addCategory(
-                            CategoryModel(
-                              name: name,
-                              monthlyLimit: limit,
-                              isIncome: isIncome,
-                              colorValue: selectedColor,
-                              iconName: isIncome
-                                  ? 'account_balance_wallet'
-                                  : 'shopping_bag',
-                            ),
-                          );
-                        }
-                        if (!context.mounted) return;
-                        Navigator.pop(context);
+                    const SizedBox(height: 16),
+                    SwitchListTile(
+                      title: Text(
+                        'Income Category',
+                        style: TextStyle(
+                          color: textPrimary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      subtitle: Text(
+                        'Check if this represents an income source',
+                        style: TextStyle(color: textSecondary),
+                      ),
+                      value: isIncome,
+                      activeThumbColor: AppColors.statusGreen,
+                      onChanged: (val) {
+                        setModalState(() => isIncome = val);
                       },
-                      child: Text(
-                        isEditing ? 'UPDATE LIMIT' : 'CREATE CATEGORY',
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final name = nameController.text.trim();
+                          final limit =
+                              double.tryParse(limitController.text.trim()) ?? 0.0;
+                          if (name.isEmpty) return;
+
+                          final vm = Provider.of<CategoryViewModel>(
+                            context,
+                            listen: false,
+                          );
+                          if (isEditing) {
+                            await vm.updateCategory(
+                              category.copyWith(
+                                name: name,
+                                monthlyLimit: limit,
+                                isIncome: isIncome,
+                                colorValue: selectedColor,
+                              ),
+                            );
+                          } else {
+                            await vm.addCategory(
+                              CategoryModel(
+                                name: name,
+                                monthlyLimit: limit,
+                                isIncome: isIncome,
+                                colorValue: selectedColor,
+                                iconName: isIncome
+                                    ? 'account_balance_wallet'
+                                    : 'shopping_bag',
+                              ),
+                            );
+                          }
+                          if (!context.mounted) return;
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          isEditing ? 'UPDATE LIMIT' : 'CREATE CATEGORY',
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
