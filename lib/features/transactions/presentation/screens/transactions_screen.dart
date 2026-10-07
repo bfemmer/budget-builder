@@ -320,31 +320,25 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  Text(
-                                    cat?.name ?? 'Category',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: textSecondary,
-                                    ),
-                                  ),
-                                  if (t.vendor.isNotEmpty) ...[
-                                    Text(
-                                      ' • ',
-                                      style: TextStyle(
-                                        color: textMuted,
+                              Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(text: cat?.name ?? 'Category'),
+                                    if (t.vendor.isNotEmpty) ...[
+                                      TextSpan(
+                                        text: ' • ',
+                                        style: TextStyle(color: textMuted),
                                       ),
-                                    ),
-                                    Text(
-                                      t.vendor,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: textSecondary,
-                                      ),
-                                    ),
+                                      TextSpan(text: t.vendor),
+                                    ],
                                   ],
-                                ],
+                                ),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: textSecondary,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 6),
                               Row(
