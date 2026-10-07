@@ -77,19 +77,6 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
       initialDate: current,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: AppColors.accentBlue,
-              onPrimary: Colors.white,
-              surface: AppColors.navySurface,
-              onSurface: AppColors.textPrimary,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
     if (picked != null) {
       setState(() {
