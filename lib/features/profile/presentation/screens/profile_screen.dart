@@ -392,6 +392,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 16),
 
                     DropdownButtonFormField<String>(
+                      isExpanded: true,
                       initialValue: _usafRanks.contains(_selectedRank)
                           ? _selectedRank
                           : _usafRanks.first,
@@ -405,6 +406,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Text(
                             rank,
                             style: const TextStyle(fontSize: 14),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         );
                       }).toList(),
@@ -432,6 +434,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Expanded(
                           child: DropdownButtonFormField<String>(
+                            isExpanded: true,
                             initialValue: _genders.contains(_selectedGender)
                                 ? _selectedGender
                                 : _genders.first,
@@ -445,6 +448,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Text(
                                   g,
                                   style: const TextStyle(fontSize: 14),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               );
                             }).toList(),
@@ -477,6 +481,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 16),
 
                     DropdownButtonFormField<String>(
+                      isExpanded: true,
                       initialValue: _familySizes.contains(_selectedFamilySize)
                           ? _selectedFamilySize
                           : _familySizes.first,
@@ -487,7 +492,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       items: _familySizes.map((f) {
                         return DropdownMenuItem(
                           value: f,
-                          child: Text(f, style: const TextStyle(fontSize: 13)),
+                          child: Text(
+                            f,
+                            style: const TextStyle(fontSize: 13),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         );
                       }).toList(),
                       onChanged: (val) {
