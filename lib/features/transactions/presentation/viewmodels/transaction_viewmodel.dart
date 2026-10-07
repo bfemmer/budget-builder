@@ -109,15 +109,20 @@ class TransactionViewModel extends ChangeNotifier {
         .fold(0.0, (sum, t) => sum + t.amount);
   }
 
-  double get totalSpentCurrentMonth {
+  double getTotalSpentCurrentMonth([CategoryViewModel? categoryViewModel]) {
     final now = DateTime.now();
-    return _transactions
-        .where((t) {
-          final d = DateTime.tryParse(t.date);
-          return d != null && d.month == now.month && d.year == now.year;
-        })
-        .fold(0.0, (sum, t) => sum + t.amount);
+    return _transactions.where((t) {
+      final d = DateTime.tryParse(t.date);
+      if (d == null || d.month != now.month || d.year != now.year) return false;
+      if (categoryViewModel != null) {
+        final cat = categoryViewModel.getCategoryById(t.categoryId);
+        if (cat != null && cat.isIncome) return false;
+      }
+      return true;
+    }).fold(0.0, (sum, t) => sum + t.amount);
   }
+
+  double get totalSpentCurrentMonth => getTotalSpentCurrentMonth();
 
   /// Check limits and post notification if spending limit exceeded
   Future<void> _checkCategorySpendingLimits(CategoryViewModel categoryViewModel) async {

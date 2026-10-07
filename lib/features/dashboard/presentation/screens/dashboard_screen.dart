@@ -57,24 +57,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final dashVm = Provider.of<DashboardViewModel>(context);
 
     final totalLimit = catVm.totalMonthlyLimit;
-    final totalSpent = txVm.totalSpentCurrentMonth;
+    final totalSpent = txVm.getTotalSpentCurrentMonth(catVm);
     final remaining = totalLimit - totalSpent;
 
     final double spendProgress = totalLimit > 0
         ? (totalSpent / totalLimit).clamp(0.0, 1.0)
         : 0.0;
 
-    // Need vs Want calculations for current month
-    final currentMonthTx = txVm.transactions.where((t) {
+    // Filter current month EXPENSE transactions only (excluding income)
+    final currentMonthExpenseTx = txVm.transactions.where((t) {
       final d = DateTime.tryParse(t.date);
       final now = DateTime.now();
-      return d != null && d.month == now.month && d.year == now.year;
+      if (d == null || d.month != now.month || d.year != now.year) return false;
+      final cat = catVm.getCategoryById(t.categoryId);
+      return cat == null || !cat.isIncome;
     }).toList();
 
-    final needsSpent = currentMonthTx
+    final needsSpent = currentMonthExpenseTx
         .where((t) => t.needOrWant == 'Need')
         .fold(0.0, (sum, t) => sum + t.amount);
-    final wantsSpent = currentMonthTx
+    final wantsSpent = currentMonthExpenseTx
         .where((t) => t.needOrWant == 'Want')
         .fold(0.0, (sum, t) => sum + t.amount);
 
