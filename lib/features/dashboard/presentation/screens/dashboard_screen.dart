@@ -527,7 +527,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          'No transactions yet. Tap "Add Expense" to get started.',
+                          'No transactions yet. Tap "Add Transaction" to get started.',
                           style: TextStyle(color: textSecondary),
                         ),
                       ),

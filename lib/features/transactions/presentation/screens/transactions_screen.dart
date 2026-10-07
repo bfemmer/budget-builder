@@ -85,8 +85,11 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
-    final modalColor = theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface;
-    final borderColor = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
+    final modalColor =
+        theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface;
+    final borderColor = isDark
+        ? AppColors.cardBorder
+        : AppColors.lightCardBorder;
     final textPrimary = theme.colorScheme.onSurface;
     final textSecondary = textPrimary.withValues(alpha: 0.65);
     final textMuted = textPrimary.withValues(alpha: 0.45);
@@ -183,10 +186,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   onChanged: (_) => setState(() {}),
                   decoration: InputDecoration(
                     hintText: 'Search vendor or description...',
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: textSecondary,
-                    ),
+                    prefixIcon: Icon(Icons.search, color: textSecondary),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
                             icon: const Icon(Icons.clear, size: 18),
@@ -242,18 +242,11 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.receipt_long,
-                          size: 64,
-                          color: textMuted,
-                        ),
+                        Icon(Icons.receipt_long, size: 64, color: textMuted),
                         const SizedBox(height: 12),
                         Text(
                           'No transactions recorded yet',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: textSecondary,
-                          ),
+                          style: TextStyle(fontSize: 16, color: textSecondary),
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton.icon(
@@ -486,7 +479,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         backgroundColor: AppColors.accentBlue,
         foregroundColor: Colors.white,
         icon: const Icon(Icons.add),
-        label: const Text('ADD EXPENSE'),
+        label: const Text('Add Transaction'),
         onPressed: () => _openAddModal(),
       ),
     );
