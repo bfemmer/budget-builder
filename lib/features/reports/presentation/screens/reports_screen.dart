@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../categories/presentation/viewmodels/category_viewmodel.dart';
+import '../../../transactions/presentation/viewmodels/transaction_viewmodel.dart';
 import '../viewmodels/reports_viewmodel.dart';
 
 class ReportsScreen extends StatefulWidget {
@@ -17,6 +18,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final catVm = Provider.of<CategoryViewModel>(context, listen: false);
+      Provider.of<TransactionViewModel>(context, listen: false).loadTransactions(catVm);
       Provider.of<ReportsViewModel>(context, listen: false).loadReportData();
     });
   }
@@ -25,6 +28,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget build(BuildContext context) {
     final reportsVm = Provider.of<ReportsViewModel>(context);
     final catVm = Provider.of<CategoryViewModel>(context);
+    final txVm = Provider.of<TransactionViewModel>(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
@@ -32,18 +36,20 @@ class _ReportsScreenState extends State<ReportsScreen> {
     final textPrimary = theme.colorScheme.onSurface;
     final textSecondary = textPrimary.withValues(alpha: 0.65);
 
-    final totalExpenses = reportsVm.getTotalExpenses(catVm);
-    final totalIncome = reportsVm.getTotalIncome(catVm);
-    final netCashFlow = reportsVm.getNetCashFlow(catVm);
+    final transactions = txVm.transactions;
 
-    final expenseMap = reportsVm.getExpenseCategoryMap(catVm);
-    final incomeMap = reportsVm.getIncomeCategoryMap(catVm);
+    final totalExpenses = reportsVm.getTotalExpenses(catVm, transactions);
+    final totalIncome = reportsVm.getTotalIncome(catVm, transactions);
+    final netCashFlow = reportsVm.getNetCashFlow(catVm, transactions);
 
-    final needsSpent = reportsVm.getNeedsExpenses(catVm);
-    final wantsSpent = reportsVm.getWantsExpenses(catVm);
+    final expenseMap = reportsVm.getExpenseCategoryMap(catVm, transactions);
+    final incomeMap = reportsVm.getIncomeCategoryMap(catVm, transactions);
 
-    final expenseCount = reportsVm.getExpenseTransactions(catVm).length;
-    final incomeCount = reportsVm.getIncomeTransactions(catVm).length;
+    final needsSpent = reportsVm.getNeedsExpenses(catVm, transactions);
+    final wantsSpent = reportsVm.getWantsExpenses(catVm, transactions);
+
+    final expenseCount = reportsVm.getExpenseTransactions(catVm, transactions).length;
+    final incomeCount = reportsVm.getIncomeTransactions(catVm, transactions).length;
 
     return Scaffold(
       appBar: AppBar(

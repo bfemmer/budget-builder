@@ -49,9 +49,10 @@ class ReportsViewModel extends ChangeNotifier {
     }
   }
 
-  List<TransactionModel> getFilteredTransactions() {
+  List<TransactionModel> getFilteredTransactions([List<TransactionModel>? transactions]) {
+    final source = transactions ?? _allTransactions;
     final now = DateTime.now();
-    return _allTransactions.where((t) {
+    return source.where((t) {
       final date = DateTime.tryParse(t.date);
       if (date == null) return false;
 
@@ -69,58 +70,86 @@ class ReportsViewModel extends ChangeNotifier {
   }
 
   /// Get expense transactions only (where category is not income)
-  List<TransactionModel> getExpenseTransactions(CategoryViewModel categoryViewModel) {
-    return getFilteredTransactions().where((t) {
+  List<TransactionModel> getExpenseTransactions(
+    CategoryViewModel categoryViewModel, [
+    List<TransactionModel>? transactions,
+  ]) {
+    return getFilteredTransactions(transactions).where((t) {
       final cat = categoryViewModel.getCategoryById(t.categoryId);
       return cat == null || !cat.isIncome;
     }).toList();
   }
 
   /// Get income transactions only
-  List<TransactionModel> getIncomeTransactions(CategoryViewModel categoryViewModel) {
-    return getFilteredTransactions().where((t) {
+  List<TransactionModel> getIncomeTransactions(
+    CategoryViewModel categoryViewModel, [
+    List<TransactionModel>? transactions,
+  ]) {
+    return getFilteredTransactions(transactions).where((t) {
       final cat = categoryViewModel.getCategoryById(t.categoryId);
       return cat != null && cat.isIncome;
     }).toList();
   }
 
-  double getTotalExpenses(CategoryViewModel categoryViewModel) {
-    return getExpenseTransactions(categoryViewModel)
+  double getTotalExpenses(
+    CategoryViewModel categoryViewModel, [
+    List<TransactionModel>? transactions,
+  ]) {
+    return getExpenseTransactions(categoryViewModel, transactions)
         .fold(0.0, (sum, t) => sum + t.amount);
   }
 
-  double getTotalIncome(CategoryViewModel categoryViewModel) {
-    return getIncomeTransactions(categoryViewModel)
+  double getTotalIncome(
+    CategoryViewModel categoryViewModel, [
+    List<TransactionModel>? transactions,
+  ]) {
+    return getIncomeTransactions(categoryViewModel, transactions)
         .fold(0.0, (sum, t) => sum + t.amount);
   }
 
-  double getNetCashFlow(CategoryViewModel categoryViewModel) {
-    return getTotalIncome(categoryViewModel) - getTotalExpenses(categoryViewModel);
+  double getNetCashFlow(
+    CategoryViewModel categoryViewModel, [
+    List<TransactionModel>? transactions,
+  ]) {
+    return getTotalIncome(categoryViewModel, transactions) -
+        getTotalExpenses(categoryViewModel, transactions);
   }
 
-  double getNeedsExpenses(CategoryViewModel categoryViewModel) {
-    return getExpenseTransactions(categoryViewModel)
+  double getNeedsExpenses(
+    CategoryViewModel categoryViewModel, [
+    List<TransactionModel>? transactions,
+  ]) {
+    return getExpenseTransactions(categoryViewModel, transactions)
         .where((t) => t.needOrWant == 'Need')
         .fold(0.0, (sum, t) => sum + t.amount);
   }
 
-  double getWantsExpenses(CategoryViewModel categoryViewModel) {
-    return getExpenseTransactions(categoryViewModel)
+  double getWantsExpenses(
+    CategoryViewModel categoryViewModel, [
+    List<TransactionModel>? transactions,
+  ]) {
+    return getExpenseTransactions(categoryViewModel, transactions)
         .where((t) => t.needOrWant == 'Want')
         .fold(0.0, (sum, t) => sum + t.amount);
   }
 
-  Map<int, double> getExpenseCategoryMap(CategoryViewModel categoryViewModel) {
+  Map<int, double> getExpenseCategoryMap(
+    CategoryViewModel categoryViewModel, [
+    List<TransactionModel>? transactions,
+  ]) {
     final Map<int, double> map = {};
-    for (var t in getExpenseTransactions(categoryViewModel)) {
+    for (var t in getExpenseTransactions(categoryViewModel, transactions)) {
       map[t.categoryId] = (map[t.categoryId] ?? 0.0) + t.amount;
     }
     return map;
   }
 
-  Map<int, double> getIncomeCategoryMap(CategoryViewModel categoryViewModel) {
+  Map<int, double> getIncomeCategoryMap(
+    CategoryViewModel categoryViewModel, [
+    List<TransactionModel>? transactions,
+  ]) {
     final Map<int, double> map = {};
-    for (var t in getIncomeTransactions(categoryViewModel)) {
+    for (var t in getIncomeTransactions(categoryViewModel, transactions)) {
       map[t.categoryId] = (map[t.categoryId] ?? 0.0) + t.amount;
     }
     return map;
