@@ -128,12 +128,15 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
     final catVm = Provider.of<CategoryViewModel>(context);
     final isEditing = widget.transaction != null;
     final theme = Theme.of(context);
-    final modalColor = theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface;
+    final modalColor =
+        theme.dialogTheme.backgroundColor ?? theme.colorScheme.surface;
     final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
     final textPrimary = theme.colorScheme.onSurface;
     final textSecondary = textPrimary.withValues(alpha: 0.65);
     final isDark = theme.brightness == Brightness.dark;
-    final chipBorder = isDark ? AppColors.cardBorder : AppColors.lightCardBorder;
+    final chipBorder = isDark
+        ? AppColors.cardBorder
+        : AppColors.lightCardBorder;
 
     return Container(
       padding: EdgeInsets.only(
@@ -165,10 +168,7 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      color: textSecondary,
-                    ),
+                    icon: Icon(Icons.close, color: textSecondary),
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -335,7 +335,7 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
 
               // Classification (Need vs Want - Key AFAS Feature!)
               const Text(
-                'AFAS CLASSIFICATION (NEED VS WANT)',
+                'CLASSIFICATION (NEED VS WANT)',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.bold,

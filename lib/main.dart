@@ -52,12 +52,16 @@ void main() async {
   final profileDataSource = ProfileLocalDataSourceImpl(dbHelper: dbHelper);
   final categoryDataSource = CategoryLocalDataSourceImpl(dbHelper: dbHelper);
   final txDataSource = TransactionLocalDataSourceImpl(dbHelper: dbHelper);
-  final notificationDataSource = NotificationLocalDataSource(dbHelper: dbHelper);
+  final notificationDataSource = NotificationLocalDataSource(
+    dbHelper: dbHelper,
+  );
   final backupDataSource = BackupRestoreDataSource(dbHelper: dbHelper);
 
   // Initialize Repositories
   final profileRepo = ProfileRepositoryImpl(localDataSource: profileDataSource);
-  final categoryRepo = CategoryRepositoryImpl(localDataSource: categoryDataSource);
+  final categoryRepo = CategoryRepositoryImpl(
+    localDataSource: categoryDataSource,
+  );
   final txRepo = TransactionRepositoryImpl(localDataSource: txDataSource);
 
   runApp(
@@ -79,7 +83,9 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => DashboardViewModel(notificationDataSource: notificationDataSource),
+          create: (_) => DashboardViewModel(
+            notificationDataSource: notificationDataSource,
+          ),
         ),
         ChangeNotifierProvider(
           create: (_) => ReportsViewModel(repository: txRepo),
@@ -140,10 +146,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: screens),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onTabSelected,
@@ -160,10 +163,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
             icon: Icon(Icons.receipt_long),
             label: 'Transactions',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.show_chart),
-            label: 'Track',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.show_chart), label: 'Track'),
           BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart),
             label: 'Reports',
@@ -196,7 +196,9 @@ class SettingsTabMenu extends StatelessWidget {
                 themeVm.isDarkMode ? Icons.light_mode : Icons.dark_mode,
                 color: AppColors.usafGold,
               ),
-              tooltip: themeVm.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+              tooltip: themeVm.isDarkMode
+                  ? 'Switch to Light Mode'
+                  : 'Switch to Dark Mode',
               onPressed: () => themeVm.toggleTheme(),
             ),
           ],
@@ -206,8 +208,8 @@ class SettingsTabMenu extends StatelessWidget {
             unselectedLabelColor: AppColors.textSecondary,
             tabs: [
               Tab(icon: Icon(Icons.person), text: 'Profile'),
-              Tab(icon: Icon(Icons.tune), text: 'Spending Limits'),
-              Tab(icon: Icon(Icons.swap_vert), text: 'Backup / JSON'),
+              Tab(icon: Icon(Icons.tune), text: 'Spend Limits'),
+              Tab(icon: Icon(Icons.swap_vert), text: 'Backup'),
             ],
           ),
         ),

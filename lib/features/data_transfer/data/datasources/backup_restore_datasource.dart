@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:path_provider/path_provider.dart';
+
 import '../../../../core/sqlite/database_helper.dart';
 import '../../../../core/sqlite/tables.dart';
 
@@ -19,7 +21,7 @@ class BackupRestoreDataSource {
     final notificationsData = await db.query(DbTables.notifications);
 
     return {
-      'app': 'AFAS Budget Builder',
+      'app': 'Budget Builder',
       'version': '1.0.0',
       'exported_at': DateTime.now().toIso8601String(),
       'profile': profileData.isNotEmpty ? profileData.first : {},
@@ -39,7 +41,9 @@ class BackupRestoreDataSource {
   Future<File> exportToJsonFile() async {
     final jsonStr = await exportToJsonString();
     final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/budget_builder_backup_${DateTime.now().millisecondsSinceEpoch}.json');
+    final file = File(
+      '${dir.path}/budget_builder_backup_${DateTime.now().millisecondsSinceEpoch}.json',
+    );
     return await file.writeAsString(jsonStr);
   }
 
