@@ -343,7 +343,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                   ),
                                 ],
                         ),
-                        child: ListTile(
+                        child: Material(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(16),
+                          child: ListTile(
                           leading: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
@@ -421,7 +424,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             ],
                           ),
                         ),
-                      );
+                      ),
+                    );
                     },
                   ),
 
@@ -459,7 +463,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                     ),
                                   ],
                           ),
-                          child: ListTile(
+                          child: Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(16),
+                            child: ListTile(
                             leading: Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
@@ -493,7 +500,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               onPressed: () => _showAddEditCategoryModal(cat),
                             ),
                           ),
-                        );
+                        ),
+                      );
                       },
                     ),
                   ],

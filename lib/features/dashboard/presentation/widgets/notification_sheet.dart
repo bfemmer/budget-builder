@@ -91,40 +91,44 @@ class NotificationSheet extends StatelessWidget {
                                 : AppColors.statusYellow,
                           ),
                         ),
-                        child: ListTile(
-                          leading: const Icon(
-                            Icons.warning_amber,
-                            color: AppColors.statusYellow,
-                          ),
-                          title: Text(
-                            item.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                              color: textPrimary,
+                        child: Material(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.warning_amber,
+                              color: AppColors.statusYellow,
                             ),
-                          ),
-                          subtitle: Text(
-                            item.message,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: textSecondary,
+                            title: Text(
+                              item.title,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: textPrimary,
+                              ),
                             ),
-                          ),
-                          trailing: item.isRead
-                              ? null
-                              : IconButton(
-                                  icon: const Icon(
-                                    Icons.mark_email_read,
-                                    size: 18,
-                                    color: AppColors.accentBlue,
+                            subtitle: Text(
+                              item.message,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: textSecondary,
+                              ),
+                            ),
+                            trailing: item.isRead
+                                ? null
+                                : IconButton(
+                                    icon: const Icon(
+                                      Icons.mark_email_read,
+                                      size: 18,
+                                      color: AppColors.accentBlue,
+                                    ),
+                                    onPressed: () {
+                                      if (item.id != null) {
+                                        vm.markAsRead(item.id!);
+                                      }
+                                    },
                                   ),
-                                  onPressed: () {
-                                    if (item.id != null) {
-                                      vm.markAsRead(item.id!);
-                                    }
-                                  },
-                                ),
+                          ),
                         ),
                       );
                     },

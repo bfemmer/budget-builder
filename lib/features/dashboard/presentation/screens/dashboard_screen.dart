@@ -602,48 +602,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                                   ],
                           ),
-                          child: ListTile(
-                            dense: true,
-                            leading: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color:
-                                    (cat != null
-                                            ? Color(cat.colorValue)
-                                            : AppColors.accentBlue)
-                                        .withValues(alpha: 0.2),
-                                shape: BoxShape.circle,
+                          child: Material(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            child: ListTile(
+                              dense: true,
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color:
+                                      (cat != null
+                                              ? Color(cat.colorValue)
+                                              : AppColors.accentBlue)
+                                          .withValues(alpha: 0.2),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  cat?.isIncome == true
+                                      ? Icons.arrow_downward
+                                      : Icons.arrow_upward,
+                                  color: cat?.isIncome == true
+                                      ? AppColors.statusGreen
+                                      : AppColors.accentBlue,
+                                  size: 18,
+                                ),
                               ),
-                              child: Icon(
-                                cat?.isIncome == true
-                                    ? Icons.arrow_downward
-                                    : Icons.arrow_upward,
-                                color: cat?.isIncome == true
-                                    ? AppColors.statusGreen
-                                    : AppColors.accentBlue,
-                                size: 18,
+                              title: Text(
+                                t.description,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: textPrimary,
+                                ),
                               ),
-                            ),
-                            title: Text(
-                              t.description,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: textPrimary,
+                              subtitle: Text(
+                                cat?.name ?? 'Category',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: textSecondary,
+                                ),
                               ),
-                            ),
-                            subtitle: Text(
-                              cat?.name ?? 'Category',
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: textSecondary,
-                              ),
-                            ),
-                            trailing: Text(
-                              CurrencyFormatter.format(t.amount),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: textPrimary,
+                              trailing: Text(
+                                CurrencyFormatter.format(t.amount),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: textPrimary,
+                                ),
                               ),
                             ),
                           ),

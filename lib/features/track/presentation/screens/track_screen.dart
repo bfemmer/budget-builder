@@ -174,7 +174,10 @@ class _TrackScreenState extends State<TrackScreen> {
                                   ),
                                 ],
                         ),
-                        child: ListTile(
+                        child: Material(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(16),
+                          child: ListTile(
                           leading: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
@@ -237,7 +240,8 @@ class _TrackScreenState extends State<TrackScreen> {
                             );
                           },
                         ),
-                      );
+                      ),
+                    );
                     },
                   ),
           ],

@@ -194,25 +194,29 @@ class CategoryDetailScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: borderColor),
                         ),
-                        child: ListTile(
-                          title: Text(t.description, style: TextStyle(fontWeight: FontWeight.bold, color: textPrimary)),
-                          subtitle: Text(
-                            '${t.vendor.isNotEmpty ? "${t.vendor} • " : ""}${t.paymentType} • ${t.needOrWant}',
-                            style: TextStyle(fontSize: 12, color: textSecondary),
-                          ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                CurrencyFormatter.format(t.amount),
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: textPrimary),
-                              ),
-                              Text(
-                                DateFormatter.formatShort(DateFormatter.parseIso(t.date)),
-                                style: TextStyle(fontSize: 11, color: textMuted),
-                              ),
-                            ],
+                        child: Material(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                          child: ListTile(
+                            title: Text(t.description, style: TextStyle(fontWeight: FontWeight.bold, color: textPrimary)),
+                            subtitle: Text(
+                              '${t.vendor.isNotEmpty ? "${t.vendor} • " : ""}${t.paymentType} • ${t.needOrWant}',
+                              style: TextStyle(fontSize: 12, color: textSecondary),
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  CurrencyFormatter.format(t.amount),
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: textPrimary),
+                                ),
+                                Text(
+                                  DateFormatter.formatShort(DateFormatter.parseIso(t.date)),
+                                  style: TextStyle(fontSize: 11, color: textMuted),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

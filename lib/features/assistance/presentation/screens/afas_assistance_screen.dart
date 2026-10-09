@@ -939,30 +939,34 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: borderColor),
       ),
-      child: ExpansionTile(
-        iconColor: isDark ? AppColors.usafGold : AppColors.accentBlue,
-        collapsedIconColor: textSecondary,
-        title: Text(
-          question,
-          style: TextStyle(
-            fontSize: 13.5,
-            fontWeight: FontWeight.w600,
-            color: textPrimary,
-          ),
-        ),
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 14),
-            child: Text(
-              answer,
-              style: TextStyle(
-                fontSize: 12.5,
-                color: textSecondary,
-                height: 1.35,
-              ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: ExpansionTile(
+          iconColor: isDark ? AppColors.usafGold : AppColors.accentBlue,
+          collapsedIconColor: textSecondary,
+          title: Text(
+            question,
+            style: TextStyle(
+              fontSize: 13.5,
+              fontWeight: FontWeight.w600,
+              color: textPrimary,
             ),
           ),
-        ],
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 14),
+              child: Text(
+                answer,
+                style: TextStyle(
+                  fontSize: 12.5,
+                  color: textSecondary,
+                  height: 1.35,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
