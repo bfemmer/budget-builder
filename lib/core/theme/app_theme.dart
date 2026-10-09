@@ -97,6 +97,18 @@ class AppTheme {
           ),
         ),
       ),
+      chipTheme: ChipThemeData(
+        backgroundColor: AppColors.navyCard,
+        selectedColor: AppColors.accentBlue,
+        disabledColor: AppColors.cardBorder,
+        labelStyle: const TextStyle(color: AppColors.textPrimary, fontSize: 12.5),
+        secondaryLabelStyle: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: AppColors.cardBorder),
+        ),
+      ),
     );
   }
 
@@ -193,6 +205,18 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: AppColors.lightSurface,
+        selectedColor: AppColors.accentBlue,
+        disabledColor: AppColors.lightCardBorder,
+        labelStyle: const TextStyle(color: AppColors.lightTextPrimary, fontSize: 12.5),
+        secondaryLabelStyle: const TextStyle(color: Colors.white, fontSize: 12.5, fontWeight: FontWeight.bold),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: AppColors.lightCardBorder),
         ),
       ),
     );

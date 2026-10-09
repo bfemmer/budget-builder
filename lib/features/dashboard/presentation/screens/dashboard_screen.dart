@@ -7,6 +7,7 @@ import '../../../categories/presentation/viewmodels/category_viewmodel.dart';
 import '../../../profile/presentation/viewmodels/profile_viewmodel.dart';
 import '../../../transactions/presentation/viewmodels/transaction_viewmodel.dart';
 import '../../../transactions/presentation/widgets/add_edit_transaction_modal.dart';
+import '../../../assistance/presentation/screens/afas_assistance_screen.dart';
 import '../viewmodels/dashboard_viewmodel.dart';
 import '../widgets/notification_sheet.dart';
 
@@ -479,14 +480,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: AppColors.usafGold,
                     textColor: textPrimary,
                     onTap: () =>
-                        widget.onNavigateTab(5), // Settings/Categories tab
-                  ),
-                  _buildQuickActionButton(
-                    icon: Icons.volunteer_activism,
-                    label: 'AFAS Relief',
-                    color: AppColors.usafGold,
-                    textColor: textPrimary,
-                    onTap: () => widget.onNavigateTab(4), // AFAS Relief tab
+                        widget.onNavigateTab(4), // Settings/Categories tab
                   ),
                   _buildQuickActionButton(
                     icon: Icons.bar_chart,
@@ -494,6 +488,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: AppColors.statusGreen,
                     textColor: textPrimary,
                     onTap: () => widget.onNavigateTab(3), // Reports tab
+                  ),
+                  _buildQuickActionButton(
+                    icon: Icons.volunteer_activism,
+                    label: 'AFAS Relief',
+                    color: AppColors.usafRed,
+                    textColor: textPrimary,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AfasAssistanceScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

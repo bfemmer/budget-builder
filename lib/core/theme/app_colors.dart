@@ -8,11 +8,12 @@ class AppColors {
   static const Color airForceBlue = Color(0xFF1E3E62);
   static const Color accentBlue = Color(0xFF0066FF);
   static const Color usafGold = Color(0xFFFFB800);
-  
+  static const Color usafRed = Color(0xFFEF4444);
+
   // Status Colors (Matching AFAS Guide)
   static const Color statusGreen = Color(0xFF10B981); // Under 50% limit
   static const Color statusYellow = Color(0xFFF59E0B); // 50% - 79% limit
-  static const Color statusRed = Color(0xFFEF4444);    // 80%+ limit
+  static const Color statusRed = Color(0xFFEF4444); // 80%+ limit
 
   // Text Colors (Dark Mode)
   static const Color textPrimary = Color(0xFFF8FAFC);

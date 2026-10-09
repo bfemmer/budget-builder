@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/url_launcher_helper.dart';
 
@@ -44,7 +45,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     final isDark = theme.brightness == Brightness.dark;
     final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
     final textPrimary = theme.colorScheme.onSurface;
-    final textSecondary = textPrimary.withValues(alpha: 0.7);
+    final textSecondary = textPrimary.withValues(alpha: 0.75);
     final borderColor = isDark
         ? AppColors.cardBorder
         : AppColors.lightCardBorder;
@@ -52,10 +53,11 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          children: [
-            const Icon(Icons.volunteer_activism, color: AppColors.usafGold),
-            const SizedBox(width: 8),
-            const Text('AFAS Assistance Guide'),
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(Icons.volunteer_activism, color: AppColors.usafRed),
+            SizedBox(width: 8),
+            Text('AFAS Assistance'),
           ],
         ),
         actions: [
@@ -72,12 +74,12 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Hero Banner Card
-            _buildHeroBanner(cardColor, borderColor, textPrimary, textSecondary),
+            _buildHeroBanner(),
 
             const SizedBox(height: 16),
 
             // Emergency Red Cross Banner
-            _buildEmergencyRedCrossBanner(context),
+            _buildEmergencyRedCrossBanner(textPrimary, textSecondary, isDark),
 
             const SizedBox(height: 24),
 
@@ -102,15 +104,45 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _buildCategoryChip('Basic Living', 0, Icons.home_repair_service),
+                  _buildCategoryChip(
+                    'Basic Living',
+                    0,
+                    Icons.home_repair_service,
+                    textPrimary,
+                    isDark,
+                  ),
                   const SizedBox(width: 8),
-                  _buildCategoryChip('Emergency Travel', 1, Icons.flight_takeoff),
+                  _buildCategoryChip(
+                    'Emergency Travel',
+                    1,
+                    Icons.flight_takeoff,
+                    textPrimary,
+                    isDark,
+                  ),
                   const SizedBox(width: 8),
-                  _buildCategoryChip('PCS & Logistics', 2, Icons.local_shipping),
+                  _buildCategoryChip(
+                    'PCS & Logistics',
+                    2,
+                    Icons.local_shipping,
+                    textPrimary,
+                    isDark,
+                  ),
                   const SizedBox(width: 8),
-                  _buildCategoryChip('Education Grants', 3, Icons.school),
+                  _buildCategoryChip(
+                    'Education Grants',
+                    3,
+                    Icons.school,
+                    textPrimary,
+                    isDark,
+                  ),
                   const SizedBox(width: 8),
-                  _buildCategoryChip('Family & Child Care', 4, Icons.child_friendly),
+                  _buildCategoryChip(
+                    'Family & Child Care',
+                    4,
+                    Icons.child_friendly,
+                    textPrimary,
+                    isDark,
+                  ),
                 ],
               ),
             ),
@@ -124,27 +156,45 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
               borderColor,
               textPrimary,
               textSecondary,
+              isDark,
             ),
 
             const SizedBox(height: 28),
 
             // Step-by-Step How to Apply Section
-            _buildHowToApplySection(cardColor, borderColor, textPrimary, textSecondary),
+            _buildHowToApplySection(
+              cardColor,
+              borderColor,
+              textPrimary,
+              textSecondary,
+            ),
 
             const SizedBox(height: 28),
 
             // Eligibility & Qualification Quiz Card
-            _buildEligibilityCheckerCard(cardColor, borderColor, textPrimary, textSecondary),
+            _buildEligibilityCheckerCard(
+              cardColor,
+              borderColor,
+              textPrimary,
+              textSecondary,
+              isDark,
+            ),
 
             const SizedBox(height: 28),
 
             // FAQ Expandable Section
-            _buildFaqSection(cardColor, borderColor, textPrimary, textSecondary),
+            _buildFaqSection(
+              cardColor,
+              borderColor,
+              textPrimary,
+              textSecondary,
+              isDark,
+            ),
 
             const SizedBox(height: 32),
 
             // Bottom CTA Callout Card
-            _buildBottomApplyCta(textPrimary),
+            _buildBottomApplyCta(textPrimary, textSecondary, isDark),
             const SizedBox(height: 24),
           ],
         ),
@@ -152,24 +202,19 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     );
   }
 
-  Widget _buildHeroBanner(
-    Color cardColor,
-    Color borderColor,
-    Color textPrimary,
-    Color textSecondary,
-  ) {
+  Widget _buildHeroBanner() {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.airForceBlue,
-            AppColors.navyDark,
-          ],
+        gradient: const LinearGradient(
+          colors: [AppColors.airForceBlue, AppColors.navyDark],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.usafGold.withValues(alpha: 0.4), width: 1.5),
+        border: Border.all(
+          color: AppColors.usafGold.withValues(alpha: 0.4),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),
@@ -211,7 +256,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
                     ),
                     SizedBox(height: 2),
                     Text(
-                      'Official AFAS Assistance & Relief',
+                      'AFAS Assistance & Relief',
                       style: TextStyle(
                         fontSize: 12,
                         color: AppColors.usafGold,
@@ -226,11 +271,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
           const SizedBox(height: 16),
           const Text(
             'AFAS standard assistance provides zero-interest loans and emergency grants to help Airmen and Guardians overcome temporary financial hardships, unexpected travel, or emergency expenses.',
-            style: TextStyle(
-              fontSize: 13.5,
-              color: Colors.white70,
-              height: 1.4,
-            ),
+            style: TextStyle(fontSize: 13.5, color: Colors.white, height: 1.4),
           ),
           const SizedBox(height: 18),
           Row(
@@ -245,10 +286,18 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  icon: const Icon(Icons.launch, size: 18),
+                  icon: const Icon(
+                    Icons.launch,
+                    size: 18,
+                    color: AppColors.navyDark,
+                  ),
                   label: const Text(
                     'APPLY AT AFAS PORTAL',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: AppColors.navyDark,
+                    ),
                   ),
                   onPressed: () => UrlLauncherHelper.openUrl(_afasPortalUrl),
                 ),
@@ -260,13 +309,27 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     );
   }
 
-  Widget _buildEmergencyRedCrossBanner(BuildContext context) {
+  Widget _buildEmergencyRedCrossBanner(
+    Color textPrimary,
+    Color textSecondary,
+    bool isDark,
+  ) {
+    final bannerBg = isDark
+        ? AppColors.statusRed.withValues(alpha: 0.2)
+        : AppColors.statusRed.withValues(alpha: 0.1);
+    final borderColor = isDark
+        ? AppColors.statusRed.withValues(alpha: 0.4)
+        : AppColors.statusRed.withValues(alpha: 0.3);
+    final subtitleColor = isDark
+        ? Colors.white.withValues(alpha: 0.85)
+        : AppColors.lightTextSecondary;
+
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.statusRed.withValues(alpha: 0.15),
+        color: bannerBg,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.statusRed.withValues(alpha: 0.4)),
+        border: Border.all(color: borderColor),
       ),
       child: Row(
         children: [
@@ -275,8 +338,8 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'After-Hours & Deployed Emergencies',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -284,10 +347,14 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
                     color: AppColors.statusRed,
                   ),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
                   '24/7 Red Cross Hero Care Center Assistance',
-                  style: TextStyle(fontSize: 11.5, color: Colors.white70),
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    color: subtitleColor,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ],
             ),
@@ -296,11 +363,18 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.statusRed,
               foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            child: const Text('CALL 24/7', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+            child: const Text(
+              'CALL 24/7',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
             onPressed: () => UrlLauncherHelper.makePhoneCall(_redCrossPhone),
           ),
         ],
@@ -308,20 +382,34 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     );
   }
 
-  Widget _buildCategoryChip(String label, int index, IconData icon) {
+  Widget _buildCategoryChip(
+    String label,
+    int index,
+    IconData icon,
+    Color textPrimary,
+    bool isDark,
+  ) {
     final isSelected = _selectedCategoryIndex == index;
+    final unselectedBg = isDark ? AppColors.navyCard : AppColors.lightSurface;
+    final unselectedBorder = isDark
+        ? AppColors.cardBorder
+        : AppColors.lightCardBorder;
+    final iconColor = isSelected
+        ? Colors.white
+        : (isDark ? AppColors.usafGold : AppColors.airForceBlue);
+
     return ChoiceChip(
-      avatar: Icon(
-        icon,
-        size: 16,
-        color: isSelected ? Colors.white : AppColors.usafGold,
-      ),
+      avatar: Icon(icon, size: 16, color: iconColor),
       label: Text(label),
       selected: isSelected,
       selectedColor: AppColors.accentBlue,
+      backgroundColor: unselectedBg,
+      side: BorderSide(
+        color: isSelected ? AppColors.accentBlue : unselectedBorder,
+      ),
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : AppColors.textPrimary,
-        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        color: isSelected ? Colors.white : textPrimary,
+        fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
         fontSize: 12.5,
       ),
       onSelected: (selected) {
@@ -340,19 +428,19 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     Color borderColor,
     Color textPrimary,
     Color textSecondary,
+    bool isDark,
   ) {
     switch (index) {
       case 0:
         return _buildProgramCard(
           title: 'Basic Living Expenses',
           icon: Icons.home_repair_service,
-          color: AppColors.accentBlue,
+          color: isDark ? AppColors.accentBlue : AppColors.airForceBlue,
           cardColor: cardColor,
           borderColor: borderColor,
           textPrimary: textPrimary,
           textSecondary: textSecondary,
-          description:
-              'Assistance for critical living costs when emergency circumstances arise, preventing financial distress.',
+          description: 'Assistance for critical living costs when emergency circumstances arise, preventing financial distress.',
           coveredItems: [
             'Rent / Mortgage payments',
             'Food & Grocery essentials',
@@ -365,13 +453,12 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
         return _buildProgramCard(
           title: 'Emergency Travel Assistance',
           icon: Icons.flight_takeoff,
-          color: AppColors.usafGold,
+          color: isDark ? AppColors.usafGold : AppColors.statusYellow,
           cardColor: cardColor,
           borderColor: borderColor,
           textPrimary: textPrimary,
           textSecondary: textSecondary,
-          description:
-              'Immediate funding for urgent travel in the event of severe family illness, injury, or death.',
+          description: 'Immediate funding for urgent travel in the event of severe family illness, injury, or death.',
           coveredItems: [
             'Round-trip airline tickets for service member & spouse',
             'Emergency vehicle fuel & lodging en route',
@@ -387,8 +474,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
           borderColor: borderColor,
           textPrimary: textPrimary,
           textSecondary: textSecondary,
-          description:
-              'Bridge funding during Permanent Change of Station (PCS) relocations to ease out-of-pocket stress.',
+          description: 'Bridge funding during Permanent Change of Station (PCS) relocations to ease out-of-pocket stress.',
           coveredItems: [
             'Temporary lodging expenses beyond TLE cap',
             'Vehicle shipment / transport costs',
@@ -405,8 +491,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
           borderColor: borderColor,
           textPrimary: textPrimary,
           textSecondary: textSecondary,
-          description:
-              'Educational support programs designed to help spouses and dependents achieve higher education degrees.',
+          description: 'Educational support programs designed to help spouses and dependents achieve higher education degrees.',
           coveredItems: [
             'General Henry H. Arnold Education Grant (\$500 – \$4,000/yr)',
             'AFAS Merit Awards for outstanding academic performance',
@@ -423,8 +508,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
           borderColor: borderColor,
           textPrimary: textPrimary,
           textSecondary: textSecondary,
-          description:
-              'Community programs providing free respite, baby bundles, and spouse career training.',
+          description: 'Community programs providing free respite, baby bundles, and spouse career training.',
           coveredItems: [
             'Bundles for Babies: Free \$100+ baby gift bundle & parenting class',
             'Give Parents a Break: Free monthly high-quality childcare',
@@ -544,8 +628,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
         _buildStepItem(
           stepNumber: '1',
           title: 'Confirm Eligibility',
-          subtitle:
-              'Active Duty Airmen/Guardians, Guard/Reserve on Title 10 (>30 days), Retired, and eligible dependents.',
+          subtitle: 'Active Duty Airmen/Guardians, Guard/Reserve on Title 10 (>30 days), Retired, and eligible dependents.',
           icon: Icons.verified_user,
           color: AppColors.accentBlue,
           cardColor: cardColor,
@@ -557,8 +640,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
         _buildStepItem(
           stepNumber: '2',
           title: 'Gather Required Documentation',
-          subtitle:
-              'Recent LES (Leave & Earnings Statement), Military ID, bill/repair estimate/quote, or travel orders.',
+          subtitle: 'Recent LES (Leave & Earnings Statement), Military ID, bill/repair estimate/quote, or travel orders.',
           icon: Icons.folder_shared,
           color: AppColors.usafGold,
           cardColor: cardColor,
@@ -570,8 +652,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
         _buildStepItem(
           stepNumber: '3',
           title: 'Submit Application',
-          subtitle:
-              'Apply online at portal.afas.org or visit your local Military & Family Readiness Center (M&FRC).',
+          subtitle: 'Apply online at portal.afas.org or visit your local Military & Family Readiness Center (M&FRC).',
           icon: Icons.send,
           color: AppColors.statusGreen,
           cardColor: cardColor,
@@ -583,8 +664,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
         _buildStepItem(
           stepNumber: '4',
           title: 'Review & Rapid Disbursement',
-          subtitle:
-              'Caseworker review & approval. Funds are sent via direct deposit or electronic transfer.',
+          subtitle: 'Caseworker review & approval. Funds are sent via direct deposit or electronic transfer.',
           icon: Icons.account_balance,
           color: AppColors.tagWant,
           cardColor: cardColor,
@@ -645,7 +725,11 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 12, color: textSecondary, height: 1.3),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: textSecondary,
+                    height: 1.3,
+                  ),
                 ),
               ],
             ),
@@ -660,6 +744,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     Color borderColor,
     Color textPrimary,
     Color textSecondary,
+    bool isDark,
   ) {
     return Container(
       padding: const EdgeInsets.all(18),
@@ -673,7 +758,11 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
         children: [
           Row(
             children: [
-              const Icon(Icons.fact_check, color: AppColors.usafGold, size: 24),
+              Icon(
+                Icons.fact_check,
+                color: isDark ? AppColors.usafGold : AppColors.airForceBlue,
+                size: 24,
+              ),
               const SizedBox(width: 10),
               Text(
                 'AFAS Emergency Assistance Checklist',
@@ -691,24 +780,46 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
             style: TextStyle(fontSize: 12.5, color: textSecondary),
           ),
           const SizedBox(height: 10),
-          _buildChecklistRow('Is the expense unexpected and due to emergency circumstances?', textPrimary),
-          _buildChecklistRow('Is the expense for essential basic needs (housing, food, utilities, car)?', textPrimary),
-          _buildChecklistRow('Do you have supporting documentation (bill, quote, or LES)?', textPrimary),
+          _buildChecklistRow(
+            'Is the expense unexpected and due to emergency circumstances?',
+            textPrimary,
+          ),
+          _buildChecklistRow(
+            'Is the expense for essential basic needs (housing, food, utilities, car)?',
+            textPrimary,
+          ),
+          _buildChecklistRow(
+            'Do you have supporting documentation (bill, quote, or LES)?',
+            textPrimary,
+          ),
           const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColors.usafGold.withValues(alpha: 0.1),
+              color: isDark
+                  ? AppColors.usafGold.withValues(alpha: 0.1)
+                  : AppColors.usafGold.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: AppColors.usafGold.withValues(alpha: 0.3),
+              ),
             ),
             child: Row(
               children: [
-                const Icon(Icons.info_outline, color: AppColors.usafGold, size: 18),
+                Icon(
+                  Icons.info_outline,
+                  color: isDark ? AppColors.usafGold : AppColors.airForceBlue,
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     'Tip: If you checked yes to these, you are likely eligible to apply for interest-free loan or grant support.',
-                    style: TextStyle(fontSize: 11.5, color: textPrimary),
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      color: textPrimary,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
@@ -724,7 +835,11 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         children: [
-          const Icon(Icons.check_box_outlined, color: AppColors.statusGreen, size: 18),
+          const Icon(
+            Icons.check_box_outlined,
+            color: AppColors.statusGreen,
+            size: 18,
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -742,6 +857,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     Color borderColor,
     Color textPrimary,
     Color textSecondary,
+    bool isDark,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -757,32 +873,32 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
         const SizedBox(height: 12),
         _buildFaqItem(
           question: 'Is AFAS assistance a loan or a grant?',
-          answer:
-              'Standard financial assistance is usually provided as an interest-free loan, a grant, or a combination of both depending on individual circumstances and financial hardship.',
+          answer: 'Standard financial assistance is usually provided as an interest-free loan, a grant, or a combination of both depending on individual circumstances and financial hardship.',
           cardColor: cardColor,
           borderColor: borderColor,
           textPrimary: textPrimary,
           textSecondary: textSecondary,
+          isDark: isDark,
         ),
         const SizedBox(height: 8),
         _buildFaqItem(
           question: 'How long does approval take?',
-          answer:
-              'Routine applications are typically reviewed within 24-48 hours. Emergency travel or critical basic living situations are fast-tracked for immediate same-day processing.',
+          answer: 'Routine applications are typically reviewed within 24-48 hours. Emergency travel or critical basic living situations are fast-tracked for immediate same-day processing.',
           cardColor: cardColor,
           borderColor: borderColor,
           textPrimary: textPrimary,
           textSecondary: textSecondary,
+          isDark: isDark,
         ),
         const SizedBox(height: 8),
         _buildFaqItem(
           question: 'Who is eligible for assistance?',
-          answer:
-              'Active Duty Airmen & Guardians, Air National Guard & Reserve members on active Title 10 orders (>30 days), retired personnel, and surviving spouses.',
+          answer: 'Active Duty Airmen & Guardians, Air National Guard & Reserve members on active Title 10 orders (>30 days), retired personnel, and surviving spouses.',
           cardColor: cardColor,
           borderColor: borderColor,
           textPrimary: textPrimary,
           textSecondary: textSecondary,
+          isDark: isDark,
         ),
       ],
     );
@@ -795,6 +911,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     required Color borderColor,
     required Color textPrimary,
     required Color textSecondary,
+    required bool isDark,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -803,6 +920,8 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
         border: Border.all(color: borderColor),
       ),
       child: ExpansionTile(
+        iconColor: isDark ? AppColors.usafGold : AppColors.accentBlue,
+        collapsedIconColor: textSecondary,
         title: Text(
           question,
           style: TextStyle(
@@ -816,7 +935,11 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 14),
             child: Text(
               answer,
-              style: TextStyle(fontSize: 12.5, color: textSecondary, height: 1.35),
+              style: TextStyle(
+                fontSize: 12.5,
+                color: textSecondary,
+                height: 1.35,
+              ),
             ),
           ),
         ],
@@ -824,13 +947,23 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
     );
   }
 
-  Widget _buildBottomApplyCta(Color textPrimary) {
+  Widget _buildBottomApplyCta(
+    Color textPrimary,
+    Color textSecondary,
+    bool isDark,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.accentBlue.withValues(alpha: 0.12),
+        color: isDark
+            ? AppColors.accentBlue.withValues(alpha: 0.12)
+            : AppColors.accentBlue.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.accentBlue.withValues(alpha: 0.3)),
+        border: Border.all(
+          color: isDark
+              ? AppColors.accentBlue.withValues(alpha: 0.3)
+              : AppColors.accentBlue.withValues(alpha: 0.2),
+        ),
       ),
       child: Column(
         children: [
@@ -845,7 +978,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
           const SizedBox(height: 6),
           Text(
             'Access the secure Air & Space Forces Aid Society portal directly to get started.',
-            style: TextStyle(fontSize: 12, color: textPrimary.withValues(alpha: 0.7)),
+            style: TextStyle(fontSize: 12, color: textSecondary),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 14),
@@ -860,10 +993,17 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              icon: const Icon(Icons.open_in_new, size: 18),
+              icon: const Icon(
+                Icons.open_in_new,
+                size: 18,
+                color: Colors.white,
+              ),
               label: const Text(
                 'OPEN PORTAL.AFAS.ORG',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
               onPressed: () => UrlLauncherHelper.openUrl(_afasPortalUrl),
             ),
