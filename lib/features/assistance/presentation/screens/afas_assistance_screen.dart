@@ -784,12 +784,14 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
                 size: 24,
               ),
               const SizedBox(width: 10),
-              Text(
-                'AFAS Emergency Assistance Checklist',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: textPrimary,
+              Expanded(
+                child: Text(
+                  'AFAS Emergency Assistance Checklist',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: textPrimary,
+                  ),
                 ),
               ),
             ],
