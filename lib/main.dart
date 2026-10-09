@@ -165,7 +165,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),
-            label: 'Transactions',
+            label: 'Ledger',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.show_chart), label: 'Track'),
           BottomNavigationBarItem(
