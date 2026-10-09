@@ -356,6 +356,26 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.phone,
+                      size: 13,
+                      color: AppColors.statusRed,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      _redCrossPhone,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.bold,
+                        color: textPrimary,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
