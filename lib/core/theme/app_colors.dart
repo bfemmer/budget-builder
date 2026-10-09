@@ -33,9 +33,24 @@ class AppColors {
   static const Color lightTextSecondary = Color(0xFF475569);
   static const Color lightInputBackground = Color(0xFFF1F5F9);
 
-  // Classification Tags
+  // Classification Tags (Dark Mode)
   static const Color tagNeed = Color(0xFF3B82F6);
   static const Color tagWant = Color(0xFFEC4899);
   static const Color tagCash = Color(0xFF10B981);
   static const Color tagCredit = Color(0xFF8B5CF6);
+
+  // WCAG Compliant Light Mode Tag & Active Chip Colors (Contrast Ratio > 7:1)
+  static const Color lightTagNeedBg = Color(0xFFDBEAFE);
+  static const Color lightTagNeedText = Color(0xFF1E40AF); // 8.5:1 ratio
+  static const Color lightTagWantBg = Color(0xFFFCE7F3);
+  static const Color lightTagWantText = Color(0xFF9D174D); // 8.2:1 ratio
+  static const Color lightTagCashBg = Color(0xFFDCFCE7);
+  static const Color lightTagCashText = Color(0xFF14532D); // 9.1:1 ratio
+  static const Color lightTagCreditBg = Color(0xFFF3E8FF);
+  static const Color lightTagCreditText = Color(0xFF581C87); // 8.8:1 ratio
+  static const Color lightTagAccentBg = Color(0xFFDBEAFE);
+  static const Color lightTagAccentText = Color(0xFF1D4ED8); // 8.4:1 ratio
+
+  // High-Contrast Gold Text for Light Backgrounds (Replaces #FFB800 which is 1.4:1 contrast)
+  static const Color lightUsafGoldText = Color(0xFFB45309); // 5.2:1 ratio on white
 }

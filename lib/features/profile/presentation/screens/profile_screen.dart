@@ -268,17 +268,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Consumer<ThemeViewModel>(
                       builder: (context, themeVm, child) {
                         final theme = Theme.of(context);
-                        final textSecondary = theme.colorScheme.onSurface.withValues(alpha: 0.65);
+                        final isDark = theme.brightness == Brightness.dark;
+                        final textPrimary = theme.colorScheme.onSurface;
+                        final textSecondary = textPrimary.withValues(alpha: 0.65);
+                        final borderColor = isDark
+                            ? AppColors.cardBorder
+                            : AppColors.lightCardBorder;
                         return Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: theme.cardTheme.color,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: theme.brightness == Brightness.dark
-                                  ? AppColors.cardBorder
-                                  : AppColors.lightCardBorder,
-                            ),
+                            border: Border.all(color: borderColor),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,10 +304,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 children: [
                                   Expanded(
                                     child: ChoiceChip(
-                                      avatar: const Icon(Icons.dark_mode, size: 16),
-                                      label: const Center(child: Text('Dark')),
+                                      avatar: Icon(
+                                        Icons.dark_mode,
+                                        size: 16,
+                                        color: themeVm.themeMode == ThemeMode.dark
+                                            ? (isDark
+                                                ? Colors.white
+                                                : AppColors.lightTagAccentText)
+                                            : textSecondary,
+                                      ),
+                                      label: Center(
+                                        child: Text(
+                                          'Dark',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: themeVm.themeMode == ThemeMode.dark
+                                                ? (isDark
+                                                    ? Colors.white
+                                                    : AppColors.lightTagAccentText)
+                                                : textPrimary,
+                                          ),
+                                        ),
+                                      ),
                                       selected: themeVm.themeMode == ThemeMode.dark,
-                                      selectedColor: AppColors.accentBlue.withValues(alpha: 0.3),
+                                      selectedColor: isDark
+                                          ? AppColors.accentBlue.withValues(alpha: 0.3)
+                                          : AppColors.lightTagAccentBg,
+                                      side: BorderSide(
+                                        color: themeVm.themeMode == ThemeMode.dark
+                                            ? (isDark
+                                                ? AppColors.accentBlue
+                                                : AppColors.lightTagAccentText)
+                                            : borderColor,
+                                      ),
                                       onSelected: (selected) {
                                         if (selected) {
                                           themeVm.setThemeMode(ThemeMode.dark);
@@ -317,10 +347,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: ChoiceChip(
-                                      avatar: const Icon(Icons.light_mode, size: 16),
-                                      label: const Center(child: Text('Light')),
+                                      avatar: Icon(
+                                        Icons.light_mode,
+                                        size: 16,
+                                        color: themeVm.themeMode == ThemeMode.light
+                                            ? (isDark
+                                                ? Colors.white
+                                                : AppColors.lightTagAccentText)
+                                            : textSecondary,
+                                      ),
+                                      label: Center(
+                                        child: Text(
+                                          'Light',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: themeVm.themeMode == ThemeMode.light
+                                                ? (isDark
+                                                    ? Colors.white
+                                                    : AppColors.lightTagAccentText)
+                                                : textPrimary,
+                                          ),
+                                        ),
+                                      ),
                                       selected: themeVm.themeMode == ThemeMode.light,
-                                      selectedColor: AppColors.accentBlue.withValues(alpha: 0.3),
+                                      selectedColor: isDark
+                                          ? AppColors.accentBlue.withValues(alpha: 0.3)
+                                          : AppColors.lightTagAccentBg,
+                                      side: BorderSide(
+                                        color: themeVm.themeMode == ThemeMode.light
+                                            ? (isDark
+                                                ? AppColors.accentBlue
+                                                : AppColors.lightTagAccentText)
+                                            : borderColor,
+                                      ),
                                       onSelected: (selected) {
                                         if (selected) {
                                           themeVm.setThemeMode(ThemeMode.light);
@@ -331,10 +390,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   const SizedBox(width: 8),
                                   Expanded(
                                     child: ChoiceChip(
-                                      avatar: const Icon(Icons.settings_suggest, size: 16),
-                                      label: const Center(child: Text('System')),
+                                      avatar: Icon(
+                                        Icons.settings_suggest,
+                                        size: 16,
+                                        color: themeVm.themeMode == ThemeMode.system
+                                            ? (isDark
+                                                ? Colors.white
+                                                : AppColors.lightTagAccentText)
+                                            : textSecondary,
+                                      ),
+                                      label: Center(
+                                        child: Text(
+                                          'System',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: themeVm.themeMode == ThemeMode.system
+                                                ? (isDark
+                                                    ? Colors.white
+                                                    : AppColors.lightTagAccentText)
+                                                : textPrimary,
+                                          ),
+                                        ),
+                                      ),
                                       selected: themeVm.themeMode == ThemeMode.system,
-                                      selectedColor: AppColors.accentBlue.withValues(alpha: 0.3),
+                                      selectedColor: isDark
+                                          ? AppColors.accentBlue.withValues(alpha: 0.3)
+                                          : AppColors.lightTagAccentBg,
+                                      side: BorderSide(
+                                        color: themeVm.themeMode == ThemeMode.system
+                                            ? (isDark
+                                                ? AppColors.accentBlue
+                                                : AppColors.lightTagAccentText)
+                                            : borderColor,
+                                      ),
                                       onSelected: (selected) {
                                         if (selected) {
                                           themeVm.setThemeMode(ThemeMode.system);

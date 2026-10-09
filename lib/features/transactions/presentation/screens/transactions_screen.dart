@@ -206,27 +206,82 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                   child: Row(
                     children: [
                       FilterChip(
-                        label: const Text('All'),
+                        label: Text(
+                          'All',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: _filterNeedWant == null
+                                ? (isDark
+                                    ? Colors.white
+                                    : AppColors.lightTagAccentText)
+                                : textPrimary,
+                          ),
+                        ),
                         selected: _filterNeedWant == null,
-                        selectedColor: AppColors.accentBlue.withValues(
-                          alpha: 0.3,
+                        selectedColor: isDark
+                            ? AppColors.accentBlue.withValues(alpha: 0.3)
+                            : AppColors.lightTagAccentBg,
+                        side: BorderSide(
+                          color: _filterNeedWant == null
+                              ? (isDark
+                                  ? AppColors.accentBlue
+                                  : AppColors.lightTagAccentText)
+                              : borderColor,
                         ),
                         onSelected: (_) =>
                             setState(() => _filterNeedWant = null),
                       ),
                       const SizedBox(width: 8),
                       FilterChip(
-                        label: const Text('Needs Only'),
+                        label: Text(
+                          'Needs Only',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: _filterNeedWant == 'Need'
+                                ? (isDark
+                                    ? Colors.white
+                                    : AppColors.lightTagNeedText)
+                                : textPrimary,
+                          ),
+                        ),
                         selected: _filterNeedWant == 'Need',
-                        selectedColor: AppColors.tagNeed.withValues(alpha: 0.3),
+                        selectedColor: isDark
+                            ? AppColors.tagNeed.withValues(alpha: 0.3)
+                            : AppColors.lightTagNeedBg,
+                        side: BorderSide(
+                          color: _filterNeedWant == 'Need'
+                              ? (isDark
+                                  ? AppColors.tagNeed
+                                  : AppColors.lightTagNeedText)
+                              : borderColor,
+                        ),
                         onSelected: (_) =>
                             setState(() => _filterNeedWant = 'Need'),
                       ),
                       const SizedBox(width: 8),
                       FilterChip(
-                        label: const Text('Wants Only'),
+                        label: Text(
+                          'Wants Only',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: _filterNeedWant == 'Want'
+                                ? (isDark
+                                    ? Colors.white
+                                    : AppColors.lightTagWantText)
+                                : textPrimary,
+                          ),
+                        ),
                         selected: _filterNeedWant == 'Want',
-                        selectedColor: AppColors.tagWant.withValues(alpha: 0.3),
+                        selectedColor: isDark
+                            ? AppColors.tagWant.withValues(alpha: 0.3)
+                            : AppColors.lightTagWantBg,
+                        side: BorderSide(
+                          color: _filterNeedWant == 'Want'
+                              ? (isDark
+                                  ? AppColors.tagWant
+                                  : AppColors.lightTagWantText)
+                              : borderColor,
+                        ),
                         onSelected: (_) =>
                             setState(() => _filterNeedWant = 'Want'),
                       ),
@@ -347,11 +402,14 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                       vertical: 2,
                                     ),
                                     decoration: BoxDecoration(
-                                      color:
-                                          (t.needOrWant == 'Need'
+                                      color: isDark
+                                          ? (t.needOrWant == 'Need'
                                                   ? AppColors.tagNeed
                                                   : AppColors.tagWant)
-                                              .withValues(alpha: 0.2),
+                                              .withValues(alpha: 0.2)
+                                          : (t.needOrWant == 'Need'
+                                              ? AppColors.lightTagNeedBg
+                                              : AppColors.lightTagWantBg),
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Text(
@@ -359,9 +417,13 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                       style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold,
-                                        color: t.needOrWant == 'Need'
-                                            ? AppColors.tagNeed
-                                            : AppColors.tagWant,
+                                        color: isDark
+                                            ? (t.needOrWant == 'Need'
+                                                ? AppColors.tagNeed
+                                                : AppColors.tagWant)
+                                            : (t.needOrWant == 'Need'
+                                                ? AppColors.lightTagNeedText
+                                                : AppColors.lightTagWantText),
                                       ),
                                     ),
                                   ),
@@ -373,11 +435,14 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                       vertical: 2,
                                     ),
                                     decoration: BoxDecoration(
-                                      color:
-                                          (t.paymentType == 'Credit'
+                                      color: isDark
+                                          ? (t.paymentType == 'Credit'
                                                   ? AppColors.tagCredit
                                                   : AppColors.tagCash)
-                                              .withValues(alpha: 0.2),
+                                              .withValues(alpha: 0.2)
+                                          : (t.paymentType == 'Credit'
+                                              ? AppColors.lightTagCreditBg
+                                              : AppColors.lightTagCashBg),
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Text(
@@ -385,9 +450,13 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                       style: TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold,
-                                        color: t.paymentType == 'Credit'
-                                            ? AppColors.tagCredit
-                                            : AppColors.tagCash,
+                                        color: isDark
+                                            ? (t.paymentType == 'Credit'
+                                                ? AppColors.tagCredit
+                                                : AppColors.tagCash)
+                                            : (t.paymentType == 'Credit'
+                                                ? AppColors.lightTagCreditText
+                                                : AppColors.lightTagCashText),
                                       ),
                                     ),
                                   ),

@@ -286,14 +286,28 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                   children: [
                     Expanded(
                       child: ChoiceChip(
-                        label: const Center(child: Text('Cash / Debit')),
-                        selected: _paymentType == 'Cash',
-                        selectedColor: AppColors.statusGreen.withValues(
-                          alpha: 0.3,
+                        label: Center(
+                          child: Text(
+                            'Cash / Debit',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: _paymentType == 'Cash'
+                                  ? (isDark
+                                      ? Colors.white
+                                      : AppColors.lightTagCashText)
+                                  : textPrimary,
+                            ),
+                          ),
                         ),
+                        selected: _paymentType == 'Cash',
+                        selectedColor: isDark
+                            ? AppColors.statusGreen.withValues(alpha: 0.3)
+                            : AppColors.lightTagCashBg,
                         side: BorderSide(
                           color: _paymentType == 'Cash'
-                              ? AppColors.statusGreen
+                              ? (isDark
+                                  ? AppColors.statusGreen
+                                  : AppColors.lightTagCashText)
                               : chipBorder,
                         ),
                         onSelected: (selected) {
@@ -304,12 +318,28 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: ChoiceChip(
-                        label: const Center(child: Text('Credit Card')),
+                        label: Center(
+                          child: Text(
+                            'Credit Card',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: _paymentType == 'Credit'
+                                  ? (isDark
+                                      ? Colors.white
+                                      : AppColors.lightTagCreditText)
+                                  : textPrimary,
+                            ),
+                          ),
+                        ),
                         selected: _paymentType == 'Credit',
-                        selectedColor: AppColors.tagCredit.withValues(alpha: 0.3),
+                        selectedColor: isDark
+                            ? AppColors.tagCredit.withValues(alpha: 0.3)
+                            : AppColors.lightTagCreditBg,
                         side: BorderSide(
                           color: _paymentType == 'Credit'
-                              ? AppColors.tagCredit
+                              ? (isDark
+                                  ? AppColors.tagCredit
+                                  : AppColors.lightTagCreditText)
                               : chipBorder,
                         ),
                         onSelected: (selected) {
@@ -323,12 +353,14 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                 const SizedBox(height: 16),
 
                 // Classification (Need vs Want - Key AFAS Feature!)
-                const Text(
+                Text(
                   'CLASSIFICATION (NEED VS WANT)',
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.usafGold,
+                    color: isDark
+                        ? AppColors.usafGold
+                        : AppColors.lightUsafGoldText,
                     letterSpacing: 1.0,
                   ),
                 ),
@@ -337,17 +369,28 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                   children: [
                     Expanded(
                       child: ChoiceChip(
-                        label: const Center(
+                        label: Center(
                           child: Text(
                             'NEED (Essential)',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: _needOrWant == 'Need'
+                                  ? (isDark
+                                      ? Colors.white
+                                      : AppColors.lightTagNeedText)
+                                  : textPrimary,
+                            ),
                           ),
                         ),
                         selected: _needOrWant == 'Need',
-                        selectedColor: AppColors.tagNeed.withValues(alpha: 0.3),
+                        selectedColor: isDark
+                            ? AppColors.tagNeed.withValues(alpha: 0.3)
+                            : AppColors.lightTagNeedBg,
                         side: BorderSide(
                           color: _needOrWant == 'Need'
-                              ? AppColors.tagNeed
+                              ? (isDark
+                                  ? AppColors.tagNeed
+                                  : AppColors.lightTagNeedText)
                               : chipBorder,
                         ),
                         onSelected: (selected) {
@@ -358,17 +401,28 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: ChoiceChip(
-                        label: const Center(
+                        label: Center(
                           child: Text(
                             'WANT (Discretionary)',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: _needOrWant == 'Want'
+                                  ? (isDark
+                                      ? Colors.white
+                                      : AppColors.lightTagWantText)
+                                  : textPrimary,
+                            ),
                           ),
                         ),
                         selected: _needOrWant == 'Want',
-                        selectedColor: AppColors.tagWant.withValues(alpha: 0.3),
+                        selectedColor: isDark
+                            ? AppColors.tagWant.withValues(alpha: 0.3)
+                            : AppColors.lightTagWantBg,
                         side: BorderSide(
                           color: _needOrWant == 'Want'
-                              ? AppColors.tagWant
+                              ? (isDark
+                                  ? AppColors.tagWant
+                                  : AppColors.lightTagWantText)
                               : chipBorder,
                         ),
                         onSelected: (selected) {
