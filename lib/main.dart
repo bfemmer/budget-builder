@@ -43,6 +43,9 @@ import 'features/data_transfer/data/datasources/backup_restore_datasource.dart';
 import 'features/data_transfer/presentation/screens/backup_restore_screen.dart';
 import 'features/data_transfer/presentation/viewmodels/backup_viewmodel.dart';
 
+// AFAS Assistance
+import 'features/assistance/presentation/screens/afas_assistance_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -144,6 +147,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
       const TransactionsScreen(),
       const TrackScreen(),
       const ReportsScreen(),
+      const AfasAssistanceScreen(),
       const SettingsTabMenu(),
     ];
 
@@ -171,6 +175,10 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
           BottomNavigationBarItem(
             icon: Icon(Icons.pie_chart),
             label: 'Reports',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.volunteer_activism),
+            label: 'AFAS Relief',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

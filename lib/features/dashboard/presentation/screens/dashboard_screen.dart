@@ -479,7 +479,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     color: AppColors.usafGold,
                     textColor: textPrimary,
                     onTap: () =>
-                        widget.onNavigateTab(4), // Settings or Categories tab
+                        widget.onNavigateTab(5), // Settings/Categories tab
+                  ),
+                  _buildQuickActionButton(
+                    icon: Icons.volunteer_activism,
+                    label: 'AFAS Relief',
+                    color: AppColors.usafGold,
+                    textColor: textPrimary,
+                    onTap: () => widget.onNavigateTab(4), // AFAS Relief tab
                   ),
                   _buildQuickActionButton(
                     icon: Icons.bar_chart,
