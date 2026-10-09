@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Core
 import 'core/sqlite/database_helper.dart';
@@ -45,6 +46,9 @@ import 'features/data_transfer/presentation/viewmodels/backup_viewmodel.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize SharedPreferences prior to UI rendering to eliminate mode flickering
+  final prefs = await SharedPreferences.getInstance();
+
   // Initialize SQLite database
   final dbHelper = DatabaseHelper.instance;
 
@@ -68,7 +72,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ThemeViewModel(dbHelper: dbHelper),
+          create: (_) => ThemeViewModel(prefs: prefs, dbHelper: dbHelper),
         ),
         ChangeNotifierProvider(
           create: (_) => ProfileViewModel(repository: profileRepo),
