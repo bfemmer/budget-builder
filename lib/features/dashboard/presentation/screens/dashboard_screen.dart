@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/utils/rank_helper.dart';
 import '../../../categories/presentation/viewmodels/category_viewmodel.dart';
 import '../../../profile/presentation/viewmodels/profile_viewmodel.dart';
 import '../../../transactions/presentation/viewmodels/transaction_viewmodel.dart';
@@ -95,13 +96,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Icon(Icons.shield, color: AppColors.usafGold, size: 24),
-            const SizedBox(width: 8),
-            Text(
-              profileVm.profile?.lastName.isNotEmpty == true
-                  ? 'Welcome, ${profileVm.profile!.firstName} ${profileVm.profile!.lastName}'
-                  : 'Budget Builder',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Builder(
+              builder: (context) {
+                final rankAsset = RankHelper.getRankImageAsset(profileVm.profile?.rank);
+                if (rankAsset != null) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Image.asset(
+                      rankAsset,
+                      width: 26,
+                      height: 26,
+                      fit: BoxFit.contain,
+                      errorBuilder: (ctx, err, stack) => const Icon(
+                        Icons.shield,
+                        color: AppColors.usafGold,
+                        size: 24,
+                      ),
+                    ),
+                  );
+                }
+                return const Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: Icon(Icons.shield, color: AppColors.usafGold, size: 24),
+                );
+              },
+            ),
+            Expanded(
+              child: Text(
+                profileVm.profile?.lastName.isNotEmpty == true
+                    ? 'Welcome, ${profileVm.profile!.firstName} ${profileVm.profile!.lastName}'
+                    : 'Budget Builder',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),

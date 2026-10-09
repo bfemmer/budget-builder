@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/theme_viewmodel.dart';
+import '../../../../core/utils/rank_helper.dart';
 import '../../data/models/profile_model.dart';
 import '../viewmodels/profile_viewmodel.dart';
 
@@ -196,19 +197,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           child: Row(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: AppColors.accentBlue.withValues(
-                                    alpha: 0.2,
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.military_tech,
-                                  size: 36,
-                                  color: AppColors.usafGold,
-                                ),
+                              Builder(
+                                builder: (context) {
+                                  final rankAsset = RankHelper.getRankImageAsset(_selectedRank);
+                                  if (rankAsset != null) {
+                                    return Container(
+                                      width: 60,
+                                      height: 60,
+                                      padding: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.accentBlue.withValues(alpha: 0.2),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: AppColors.usafGold.withValues(alpha: 0.5),
+                                          width: 1.5,
+                                        ),
+                                      ),
+                                      child: Image.asset(
+                                        rankAsset,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (ctx, err, stack) => const Icon(
+                                          Icons.military_tech,
+                                          size: 36,
+                                          color: AppColors.usafGold,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.accentBlue.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.military_tech,
+                                      size: 36,
+                                      color: AppColors.usafGold,
+                                    ),
+                                  );
+                                },
                               ),
                               const SizedBox(width: 16),
                               Expanded(
