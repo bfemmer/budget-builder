@@ -40,6 +40,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) {
         return StatefulBuilder(
@@ -57,7 +58,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   top: Radius.circular(24),
                 ),
               ),
-              child: SingleChildScrollView(
+              child: SafeArea(
+                top: false,
+                child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,9 +182,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   ],
                 ),
               ),
-            );
-          },
-        );
+            ),
+          );
+        },
+      );
       },
     );
   }

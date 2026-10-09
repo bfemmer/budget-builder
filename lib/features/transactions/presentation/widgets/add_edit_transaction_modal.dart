@@ -136,260 +136,263 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
         color: modalColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    isEditing ? 'Edit Transaction' : 'Record Transaction',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: textPrimary,
+      child: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      isEditing ? 'Edit Transaction' : 'Record Transaction',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: textPrimary,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.close, color: textSecondary),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _descController,
-                decoration: const InputDecoration(
-                  labelText: 'Transaction Description',
-                  hintText: 'e.g. Weekly Groceries, Fuel, Movie Ticket',
+                    IconButton(
+                      icon: Icon(Icons.close, color: textSecondary),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
                 ),
-                validator: (val) => val == null || val.trim().isEmpty
-                    ? 'Enter description'
-                    : null,
-              ),
+                const SizedBox(height: 16),
 
-              const SizedBox(height: 16),
+                TextFormField(
+                  controller: _descController,
+                  decoration: const InputDecoration(
+                    labelText: 'Transaction Description',
+                    hintText: 'e.g. Weekly Groceries, Fuel, Movie Ticket',
+                  ),
+                  validator: (val) => val == null || val.trim().isEmpty
+                      ? 'Enter description'
+                      : null,
+                ),
 
-              DropdownButtonFormField<int>(
-                initialValue:
-                    catVm.categories.any((c) => c.id == _selectedCategoryId)
-                    ? _selectedCategoryId
-                    : (catVm.categories.isNotEmpty
-                          ? catVm.categories.first.id
-                          : null),
-                decoration: const InputDecoration(labelText: 'Category'),
-                dropdownColor: cardColor,
-                items: catVm.categories.map((cat) {
-                  return DropdownMenuItem<int>(
-                    value: cat.id,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: Color(cat.colorValue),
-                            shape: BoxShape.circle,
+                const SizedBox(height: 16),
+
+                DropdownButtonFormField<int>(
+                  initialValue:
+                      catVm.categories.any((c) => c.id == _selectedCategoryId)
+                      ? _selectedCategoryId
+                      : (catVm.categories.isNotEmpty
+                            ? catVm.categories.first.id
+                            : null),
+                  decoration: const InputDecoration(labelText: 'Category'),
+                  dropdownColor: cardColor,
+                  items: catVm.categories.map((cat) {
+                    return DropdownMenuItem<int>(
+                      value: cat.id,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: Color(cat.colorValue),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            cat.name,
+                            style: TextStyle(fontSize: 14, color: textPrimary),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (val) {
+                    if (val != null) setState(() => _selectedCategoryId = val);
+                  },
+                  validator: (val) => val == null ? 'Select category' : null,
+                ),
+
+                const SizedBox(height: 16),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _dateController,
+                        readOnly: true,
+                        onTap: _pickDate,
+                        decoration: InputDecoration(
+                          labelText: 'Date of Transaction',
+                          suffixIcon: Icon(
+                            Icons.calendar_today,
+                            size: 18,
+                            color: textSecondary,
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        Text(
-                          cat.name,
-                          style: TextStyle(fontSize: 14, color: textPrimary),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _amountController,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
                         ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  if (val != null) setState(() => _selectedCategoryId = val);
-                },
-                validator: (val) => val == null ? 'Select category' : null,
-              ),
-
-              const SizedBox(height: 16),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _dateController,
-                      readOnly: true,
-                      onTap: _pickDate,
-                      decoration: InputDecoration(
-                        labelText: 'Date of Transaction',
-                        suffixIcon: Icon(
-                          Icons.calendar_today,
-                          size: 18,
-                          color: textSecondary,
+                        decoration: const InputDecoration(
+                          labelText: 'Amount (\$)',
+                          prefixText: '\$ ',
                         ),
+                        validator: (val) {
+                          if (val == null || val.trim().isEmpty) {
+                            return 'Enter amount';
+                          }
+                          if (double.tryParse(val.trim()) == null) {
+                            return 'Invalid amount';
+                          }
+                          return null;
+                        },
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _amountController,
-                      keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                      decoration: const InputDecoration(
-                        labelText: 'Amount (\$)',
-                        prefixText: '\$ ',
-                      ),
-                      validator: (val) {
-                        if (val == null || val.trim().isEmpty) {
-                          return 'Enter amount';
-                        }
-                        if (double.tryParse(val.trim()) == null) {
-                          return 'Invalid amount';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _vendorController,
-                decoration: InputDecoration(
-                  labelText: 'Vendor / Merchant Name',
-                  hintText: 'e.g. DeCA Commissary, AAFES Exchange, Chevron',
-                  prefixIcon: Icon(Icons.store, color: textSecondary),
+                  ],
                 ),
-              ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              // Payment Type (Cash vs Credit)
-              Text(
-                'PAYMENT TYPE',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: textSecondary,
-                  letterSpacing: 1.0,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: ChoiceChip(
-                      label: const Center(child: Text('Cash / Debit')),
-                      selected: _paymentType == 'Cash',
-                      selectedColor: AppColors.statusGreen.withValues(
-                        alpha: 0.3,
-                      ),
-                      side: BorderSide(
-                        color: _paymentType == 'Cash'
-                            ? AppColors.statusGreen
-                            : chipBorder,
-                      ),
-                      onSelected: (selected) {
-                        if (selected) setState(() => _paymentType = 'Cash');
-                      },
-                    ),
+                TextFormField(
+                  controller: _vendorController,
+                  decoration: InputDecoration(
+                    labelText: 'Vendor / Merchant Name',
+                    hintText: 'e.g. DeCA Commissary, AAFES Exchange, Chevron',
+                    prefixIcon: Icon(Icons.store, color: textSecondary),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ChoiceChip(
-                      label: const Center(child: Text('Credit Card')),
-                      selected: _paymentType == 'Credit',
-                      selectedColor: AppColors.tagCredit.withValues(alpha: 0.3),
-                      side: BorderSide(
-                        color: _paymentType == 'Credit'
-                            ? AppColors.tagCredit
-                            : chipBorder,
-                      ),
-                      onSelected: (selected) {
-                        if (selected) setState(() => _paymentType = 'Credit');
-                      },
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Classification (Need vs Want - Key AFAS Feature!)
-              const Text(
-                'CLASSIFICATION (NEED VS WANT)',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.usafGold,
-                  letterSpacing: 1.0,
                 ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: ChoiceChip(
-                      label: const Center(
-                        child: Text(
-                          'NEED (Essential)',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+
+                const SizedBox(height: 16),
+
+                // Payment Type (Cash vs Credit)
+                Text(
+                  'PAYMENT TYPE',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: textSecondary,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ChoiceChip(
+                        label: const Center(child: Text('Cash / Debit')),
+                        selected: _paymentType == 'Cash',
+                        selectedColor: AppColors.statusGreen.withValues(
+                          alpha: 0.3,
                         ),
-                      ),
-                      selected: _needOrWant == 'Need',
-                      selectedColor: AppColors.tagNeed.withValues(alpha: 0.3),
-                      side: BorderSide(
-                        color: _needOrWant == 'Need'
-                            ? AppColors.tagNeed
-                            : chipBorder,
-                      ),
-                      onSelected: (selected) {
-                        if (selected) setState(() => _needOrWant = 'Need');
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ChoiceChip(
-                      label: const Center(
-                        child: Text(
-                          'WANT (Discretionary)',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        side: BorderSide(
+                          color: _paymentType == 'Cash'
+                              ? AppColors.statusGreen
+                              : chipBorder,
                         ),
+                        onSelected: (selected) {
+                          if (selected) setState(() => _paymentType = 'Cash');
+                        },
                       ),
-                      selected: _needOrWant == 'Want',
-                      selectedColor: AppColors.tagWant.withValues(alpha: 0.3),
-                      side: BorderSide(
-                        color: _needOrWant == 'Want'
-                            ? AppColors.tagWant
-                            : chipBorder,
-                      ),
-                      onSelected: (selected) {
-                        if (selected) setState(() => _needOrWant = 'Want');
-                      },
                     ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 24),
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.check_circle),
-                  label: Text(
-                    isEditing ? 'UPDATE TRANSACTION' : 'ADD TRANSACTION',
-                  ),
-                  onPressed: _submit,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ChoiceChip(
+                        label: const Center(child: Text('Credit Card')),
+                        selected: _paymentType == 'Credit',
+                        selectedColor: AppColors.tagCredit.withValues(alpha: 0.3),
+                        side: BorderSide(
+                          color: _paymentType == 'Credit'
+                              ? AppColors.tagCredit
+                              : chipBorder,
+                        ),
+                        onSelected: (selected) {
+                          if (selected) setState(() => _paymentType = 'Credit');
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 16),
+
+                // Classification (Need vs Want - Key AFAS Feature!)
+                const Text(
+                  'CLASSIFICATION (NEED VS WANT)',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.usafGold,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ChoiceChip(
+                        label: const Center(
+                          child: Text(
+                            'NEED (Essential)',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        selected: _needOrWant == 'Need',
+                        selectedColor: AppColors.tagNeed.withValues(alpha: 0.3),
+                        side: BorderSide(
+                          color: _needOrWant == 'Need'
+                              ? AppColors.tagNeed
+                              : chipBorder,
+                        ),
+                        onSelected: (selected) {
+                          if (selected) setState(() => _needOrWant = 'Need');
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ChoiceChip(
+                        label: const Center(
+                          child: Text(
+                            'WANT (Discretionary)',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        selected: _needOrWant == 'Want',
+                        selectedColor: AppColors.tagWant.withValues(alpha: 0.3),
+                        side: BorderSide(
+                          color: _needOrWant == 'Want'
+                              ? AppColors.tagWant
+                              : chipBorder,
+                        ),
+                        onSelected: (selected) {
+                          if (selected) setState(() => _needOrWant = 'Want');
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 24),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.check_circle),
+                    label: Text(
+                      isEditing ? 'UPDATE TRANSACTION' : 'ADD TRANSACTION',
+                    ),
+                    onPressed: _submit,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

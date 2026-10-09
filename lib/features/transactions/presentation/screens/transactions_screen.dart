@@ -46,6 +46,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => AddEditTransactionModal(
         transaction: t,
@@ -104,68 +105,71 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             onPressed: () {
               showModalBottomSheet(
                 context: context,
+                useSafeArea: true,
                 backgroundColor: modalColor,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 builder: (ctx) {
-                  return Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Filter Transactions',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: textPrimary,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        DropdownButtonFormField<int?>(
-                          initialValue: _filterCategoryId,
-                          decoration: const InputDecoration(
-                            labelText: 'Filter by Category',
-                          ),
-                          dropdownColor: cardColor,
-                          items: [
-                            const DropdownMenuItem<int?>(
-                              value: null,
-                              child: Text('All Categories'),
+                  return SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Filter Transactions',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: textPrimary,
                             ),
-                            ...catVm.categories.map((c) {
-                              return DropdownMenuItem<int?>(
-                                value: c.id,
-                                child: Text(c.name),
-                              );
-                            }),
-                          ],
-                          onChanged: (val) {
-                            setState(() => _filterCategoryId = val);
-                            Navigator.pop(ctx);
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _filterCategoryId = null;
-                                    _filterNeedWant = null;
-                                    _searchController.clear();
-                                  });
-                                  Navigator.pop(ctx);
-                                },
-                                child: const Text('Reset Filters'),
+                          ),
+                          const SizedBox(height: 16),
+                          DropdownButtonFormField<int?>(
+                            initialValue: _filterCategoryId,
+                            decoration: const InputDecoration(
+                              labelText: 'Filter by Category',
+                            ),
+                            dropdownColor: cardColor,
+                            items: [
+                              const DropdownMenuItem<int?>(
+                                value: null,
+                                child: Text('All Categories'),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              ...catVm.categories.map((c) {
+                                return DropdownMenuItem<int?>(
+                                  value: c.id,
+                                  child: Text(c.name),
+                                );
+                              }),
+                            ],
+                            onChanged: (val) {
+                              setState(() => _filterCategoryId = val);
+                              Navigator.pop(ctx);
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _filterCategoryId = null;
+                                      _filterNeedWant = null;
+                                      _searchController.clear();
+                                    });
+                                    Navigator.pop(ctx);
+                                  },
+                                  child: const Text('Reset Filters'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -420,51 +424,54 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                           onTap: () {
                             showModalBottomSheet(
                               context: context,
+                              useSafeArea: true,
                               backgroundColor: modalColor,
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(20),
                                 ),
                               ),
-                              builder: (ctx) => Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ListTile(
-                                    leading: const Icon(
-                                      Icons.edit,
-                                      color: AppColors.accentBlue,
+                              builder: (ctx) => SafeArea(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      leading: const Icon(
+                                        Icons.edit,
+                                        color: AppColors.accentBlue,
+                                      ),
+                                      title: Text(
+                                        'Edit Transaction',
+                                        style: TextStyle(color: textPrimary),
+                                      ),
+                                      onTap: () {
+                                        Navigator.pop(ctx);
+                                        _openAddModal(t);
+                                      },
                                     ),
-                                    title: Text(
-                                      'Edit Transaction',
-                                      style: TextStyle(color: textPrimary),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pop(ctx);
-                                      _openAddModal(t);
-                                    },
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(
-                                      Icons.delete,
-                                      color: AppColors.statusRed,
-                                    ),
-                                    title: const Text(
-                                      'Delete Transaction',
-                                      style: TextStyle(
+                                    ListTile(
+                                      leading: const Icon(
+                                        Icons.delete,
                                         color: AppColors.statusRed,
                                       ),
+                                      title: const Text(
+                                        'Delete Transaction',
+                                        style: TextStyle(
+                                          color: AppColors.statusRed,
+                                        ),
+                                      ),
+                                      onTap: () async {
+                                        Navigator.pop(ctx);
+                                        if (t.id != null) {
+                                          await txVm.deleteTransaction(
+                                            t.id!,
+                                            catVm,
+                                          );
+                                        }
+                                      },
                                     ),
-                                    onTap: () async {
-                                      Navigator.pop(ctx);
-                                      if (t.id != null) {
-                                        await txVm.deleteTransaction(
-                                          t.id!,
-                                          catVm,
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },

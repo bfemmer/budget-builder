@@ -44,6 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => const NotificationSheet(),
     );
@@ -462,6 +463,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
+                        useSafeArea: true,
                         backgroundColor: Colors.transparent,
                         builder: (ctx) => AddEditTransactionModal(
                           onSave: (model) async {
