@@ -3,7 +3,7 @@
 [![Flutter](https://img.shields.io/badge/Flutter-^3.13.2-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-^3.0.0-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev)
 [![Accessibility](https://img.shields.io/badge/WCAG%202.1-AAA%20Compliant-008000?style=for-the-badge)](https://www.w3.org/WAI/standards-guidelines/wcag/)
-[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 **Budget Builder** is a modern, responsive, offline-first personal finance and expense tracking mobile application specifically tailored for **U.S. Air Force Airmen**, **Space Force Guardians**, and military family members. Designed around military pay structures and Air & Space Forces Aid Society (AFAS) guidelines, Budget Builder empowers service members to take control of their finances, track essential vs. discretionary spending, and quickly access emergency financial assistance when needed.
 
