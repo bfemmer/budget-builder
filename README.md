@@ -32,7 +32,14 @@
   - 🔴 **Red**: Category spending has reached or exceeded 80% of limit.
 - **Category Detail Views**: In-depth transaction histories, remaining balance calculations, and percentage progress per category.
 
-### 🛡️ 4. AFAS Emergency Financial Assistance & Guidance
+### 📊 4. Financial Reports, Month Selection & PDF Export
+- **Flexible Timeframe Filtering**: Filter financial metrics across *Last 7 Days*, *Last Month*, *Year-to-Date (YTD)*, or select any **Specific Month** using the interactive Month & Year picker dialog.
+- **Executive Cash Flow Summary**: Real-time calculation of total income, total expenses, net cash flow balance (*Net Surplus* vs. *Net Deficit*), and record counts.
+- **Financial Awareness Breakdown**: Essential (*Needs*) vs. discretionary (*Wants*) expense analysis with percentage breakdown metrics.
+- **Category & Income Breakdown**: Itemized category spending progress bars and income source listings.
+- **Executive PDF Report Export**: 1-click PDF document generation producing professional financial reports complete with executive headers, cash flow cards, category breakdown tables, and detailed transaction logs. Supports saving, printing, or sharing via native OS share sheets.
+
+### 🛡️ 5. AFAS Emergency Financial Assistance & Guidance
 - **Educational Portal**: Detailed guides on assistance offered by the **Air and Space Forces Aid Society** (Standard Assistance, Emergency Relief, Education Grants, Falcon Loans).
 - **4-Step Application Guide**: Clear walkthrough explaining how Airmen and Guardians can apply for AFAS financial support.
 - **Emergency Eligibility Checklist**: Interactive checklist helping users verify if their unexpected expense qualifies under emergency criteria.
@@ -40,7 +47,7 @@
 - **Direct Portal Launcher**: 1-click button to open the official AFAS portal (`portal.afas.org`).
 - **FAQ Accordion**: Expandable answers addressing common questions regarding loans, grants, and eligibility.
 
-### 🎖️ 5. Military Rank Integration & Profile Management
+### 🎖️ 6. Military Rank Integration & Profile Management
 - **Official USAF Rank Insignia Assets**: Transparent PNG graphics representing:
   - **Enlisted Ranks (E-2 to E-9)**: Airman (E-2), Airman First Class (E-3), Senior Airman (E-4), Staff Sergeant (E-5), Technical Sergeant (E-6), Master Sergeant (E-7), Senior Master Sergeant (E-8), Chief Master Sergeant (E-9).
   - **Officer Ranks (O-1 to O-6)**: 2nd Lieutenant (O-1), 1st Lieutenant (O-2), Captain (O-3), Major (O-4), Lieutenant Colonel (O-5), Colonel (O-6).
@@ -48,12 +55,12 @@
 - **Profile Customization**: Store personal details including First/Last Name, Rank/Paygrade, Duty Station/Base, Gender, Date of Birth, Household Family Size, and Email.
 - **Live Badge Preview**: Changing rank in settings updates profile cards and top dashboard headers across the app in real-time.
 
-### 🎨 6. Theme Engine & WCAG AAA Contrast Accessibility
+### 🎨 7. Theme Engine & WCAG AAA Contrast Accessibility
 - **Light, Dark & System Theme Modes**: Seamless mode toggling persisted using `SharedPreferences` initialized prior to application startup to eliminate frame-1 mode flickering.
 - **WCAG AA/AAA Compliant Palette**: Tailored text and background colors (`#14532D`, `#581C87`, `#1E40AF`, `#9D174D`) delivering 8:1 to 9.1:1 contrast ratios on choice chips, filter chips, tag badges, and bottom modal sheets in both Light and Dark modes.
 - **Material Ink Splash Safety**: Custom `Material` container wrappers preventing framework rendering assertions and ensuring smooth touch ripple feedback.
 
-### 💾 7. Data Transfer & Offline Persistence
+### 💾 8. Data Transfer & Offline Persistence
 - **Offline Storage**: Powered by SQLite (`sqflite`) for reliable offline operation without requiring constant internet connection.
 - **Backup & Restore**: Export and restore budget data seamlessly from device storage.
 
@@ -75,7 +82,7 @@ lib/
     ├── dashboard/            # Overview hero card, quick actions, & notification sheet
     ├── data_transfer/        # Backup & restore data management
     ├── profile/              # User profile entity, model, repository, & screen
-    ├── reports/              # Visual expense breakdown & analytics
+    ├── reports/              # Visual expense breakdown, month selector, & PDF report generator
     ├── track/                # Category threshold tracking & category detail screen
     └── transactions/         # Transaction ledger, add/edit modal, & filter chips
 ```
@@ -84,6 +91,7 @@ lib/
 - **State Management**: `provider` (^6.1.5)
 - **Local Database**: `sqflite` (^2.4.4)
 - **Persistence**: `shared_preferences` (^2.5.6)
+- **PDF Generation & Export**: `pdf` (^3.13.1) & `printing` (^5.15.1)
 - **Path Utilities**: `path` & `path_provider`
 - **Formatting**: `intl` (^0.20.3)
 - **URL Launcher**: `url_launcher` (^6.3.3)
