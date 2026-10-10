@@ -212,20 +212,23 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                             fontWeight: FontWeight.bold,
                             color: _filterNeedWant == null
                                 ? (isDark
-                                    ? Colors.white
-                                    : AppColors.lightTagAccentText)
+                                      ? Colors.white
+                                      : AppColors.lightTagAccentText)
                                 : textPrimary,
                           ),
                         ),
                         selected: _filterNeedWant == null,
+                        checkmarkColor: isDark
+                            ? Colors.white
+                            : AppColors.lightTagAccentText,
                         selectedColor: isDark
                             ? AppColors.accentBlue.withValues(alpha: 0.3)
                             : AppColors.lightTagAccentBg,
                         side: BorderSide(
                           color: _filterNeedWant == null
                               ? (isDark
-                                  ? AppColors.accentBlue
-                                  : AppColors.lightTagAccentText)
+                                    ? AppColors.accentBlue
+                                    : AppColors.lightTagAccentText)
                               : borderColor,
                         ),
                         onSelected: (_) =>
@@ -239,20 +242,23 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                             fontWeight: FontWeight.bold,
                             color: _filterNeedWant == 'Need'
                                 ? (isDark
-                                    ? Colors.white
-                                    : AppColors.lightTagNeedText)
+                                      ? Colors.white
+                                      : AppColors.lightTagNeedText)
                                 : textPrimary,
                           ),
                         ),
                         selected: _filterNeedWant == 'Need',
+                        checkmarkColor: isDark
+                            ? Colors.white
+                            : AppColors.lightTagNeedText,
                         selectedColor: isDark
                             ? AppColors.tagNeed.withValues(alpha: 0.3)
                             : AppColors.lightTagNeedBg,
                         side: BorderSide(
                           color: _filterNeedWant == 'Need'
                               ? (isDark
-                                  ? AppColors.tagNeed
-                                  : AppColors.lightTagNeedText)
+                                    ? AppColors.tagNeed
+                                    : AppColors.lightTagNeedText)
                               : borderColor,
                         ),
                         onSelected: (_) =>
@@ -266,20 +272,23 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                             fontWeight: FontWeight.bold,
                             color: _filterNeedWant == 'Want'
                                 ? (isDark
-                                    ? Colors.white
-                                    : AppColors.lightTagWantText)
+                                      ? Colors.white
+                                      : AppColors.lightTagWantText)
                                 : textPrimary,
                           ),
                         ),
                         selected: _filterNeedWant == 'Want',
+                        checkmarkColor: isDark
+                            ? Colors.white
+                            : AppColors.lightTagWantText,
                         selectedColor: isDark
                             ? AppColors.tagWant.withValues(alpha: 0.3)
                             : AppColors.lightTagWantBg,
                         side: BorderSide(
                           color: _filterNeedWant == 'Want'
                               ? (isDark
-                                  ? AppColors.tagWant
-                                  : AppColors.lightTagWantText)
+                                    ? AppColors.tagWant
+                                    : AppColors.lightTagWantText)
                               : borderColor,
                         ),
                         onSelected: (_) =>
@@ -349,207 +358,210 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(16),
                           child: ListTile(
-                          leading: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: catColor.withValues(alpha: 0.2),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              cat?.isIncome == true
-                                  ? Icons.arrow_downward
-                                  : Icons.arrow_upward,
-                              color: cat?.isIncome == true
-                                  ? AppColors.statusGreen
-                                  : catColor,
-                            ),
-                          ),
-                          title: Text(
-                            t.description,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: textPrimary,
-                            ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 4),
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(text: cat?.name ?? 'Category'),
-                                    if (t.vendor.isNotEmpty) ...[
-                                      TextSpan(
-                                        text: ' • ',
-                                        style: TextStyle(color: textMuted),
-                                      ),
-                                      TextSpan(text: t.vendor),
-                                    ],
-                                  ],
-                                ),
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: textSecondary,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                            leading: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: catColor.withValues(alpha: 0.2),
+                                shape: BoxShape.circle,
                               ),
-                              const SizedBox(height: 6),
-                              Row(
-                                children: [
-                                  // Need/Want Tag
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 2,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: isDark
-                                          ? (t.needOrWant == 'Need'
-                                                  ? AppColors.tagNeed
-                                                  : AppColors.tagWant)
-                                              .withValues(alpha: 0.2)
-                                          : (t.needOrWant == 'Need'
-                                              ? AppColors.lightTagNeedBg
-                                              : AppColors.lightTagWantBg),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      t.needOrWant.toUpperCase(),
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
+                              child: Icon(
+                                cat?.isIncome == true
+                                    ? Icons.arrow_downward
+                                    : Icons.arrow_upward,
+                                color: cat?.isIncome == true
+                                    ? AppColors.statusGreen
+                                    : catColor,
+                              ),
+                            ),
+                            title: Text(
+                              t.description,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: textPrimary,
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 4),
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(text: cat?.name ?? 'Category'),
+                                      if (t.vendor.isNotEmpty) ...[
+                                        TextSpan(
+                                          text: ' • ',
+                                          style: TextStyle(color: textMuted),
+                                        ),
+                                        TextSpan(text: t.vendor),
+                                      ],
+                                    ],
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: textSecondary,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 6),
+                                Row(
+                                  children: [
+                                    // Need/Want Tag
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
                                         color: isDark
                                             ? (t.needOrWant == 'Need'
-                                                ? AppColors.tagNeed
-                                                : AppColors.tagWant)
+                                                      ? AppColors.tagNeed
+                                                      : AppColors.tagWant)
+                                                  .withValues(alpha: 0.2)
                                             : (t.needOrWant == 'Need'
-                                                ? AppColors.lightTagNeedText
-                                                : AppColors.lightTagWantText),
+                                                  ? AppColors.lightTagNeedBg
+                                                  : AppColors.lightTagWantBg),
+                                        borderRadius: BorderRadius.circular(6),
                                       ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  // Payment Type Tag
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 2,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: isDark
-                                          ? (t.paymentType == 'Credit'
-                                                  ? AppColors.tagCredit
-                                                  : AppColors.tagCash)
-                                              .withValues(alpha: 0.2)
-                                          : (t.paymentType == 'Credit'
-                                              ? AppColors.lightTagCreditBg
-                                              : AppColors.lightTagCashBg),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      t.paymentType.toUpperCase(),
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        color: isDark
-                                            ? (t.paymentType == 'Credit'
-                                                ? AppColors.tagCredit
-                                                : AppColors.tagCash)
-                                            : (t.paymentType == 'Credit'
-                                                ? AppColors.lightTagCreditText
-                                                : AppColors.lightTagCashText),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                CurrencyFormatter.format(t.amount),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: cat?.isIncome == true
-                                      ? AppColors.statusGreen
-                                      : textPrimary,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                DateFormatter.formatShort(
-                                  DateFormatter.parseIso(t.date),
-                                ),
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: textMuted,
-                                ),
-                              ),
-                            ],
-                          ),
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              useSafeArea: true,
-                              backgroundColor: modalColor,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20),
-                                ),
-                              ),
-                              builder: (ctx) => SafeArea(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListTile(
-                                      leading: const Icon(
-                                        Icons.edit,
-                                        color: AppColors.accentBlue,
-                                      ),
-                                      title: Text(
-                                        'Edit Transaction',
-                                        style: TextStyle(color: textPrimary),
-                                      ),
-                                      onTap: () {
-                                        Navigator.pop(ctx);
-                                        _openAddModal(t);
-                                      },
-                                    ),
-                                    ListTile(
-                                      leading: const Icon(
-                                        Icons.delete,
-                                        color: AppColors.statusRed,
-                                      ),
-                                      title: const Text(
-                                        'Delete Transaction',
+                                      child: Text(
+                                        t.needOrWant.toUpperCase(),
                                         style: TextStyle(
-                                          color: AppColors.statusRed,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          color: isDark
+                                              ? (t.needOrWant == 'Need'
+                                                    ? AppColors.tagNeed
+                                                    : AppColors.tagWant)
+                                              : (t.needOrWant == 'Need'
+                                                    ? AppColors.lightTagNeedText
+                                                    : AppColors
+                                                          .lightTagWantText),
                                         ),
                                       ),
-                                      onTap: () async {
-                                        Navigator.pop(ctx);
-                                        if (t.id != null) {
-                                          await txVm.deleteTransaction(
-                                            t.id!,
-                                            catVm,
-                                          );
-                                        }
-                                      },
+                                    ),
+                                    const SizedBox(width: 8),
+                                    // Payment Type Tag
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isDark
+                                            ? (t.paymentType == 'Credit'
+                                                      ? AppColors.tagCredit
+                                                      : AppColors.tagCash)
+                                                  .withValues(alpha: 0.2)
+                                            : (t.paymentType == 'Credit'
+                                                  ? AppColors.lightTagCreditBg
+                                                  : AppColors.lightTagCashBg),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Text(
+                                        t.paymentType.toUpperCase(),
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          color: isDark
+                                              ? (t.paymentType == 'Credit'
+                                                    ? AppColors.tagCredit
+                                                    : AppColors.tagCash)
+                                              : (t.paymentType == 'Credit'
+                                                    ? AppColors
+                                                          .lightTagCreditText
+                                                    : AppColors
+                                                          .lightTagCashText),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            );
-                          },
+                              ],
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  CurrencyFormatter.format(t.amount),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: cat?.isIncome == true
+                                        ? AppColors.statusGreen
+                                        : textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  DateFormatter.formatShort(
+                                    DateFormatter.parseIso(t.date),
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: textMuted,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                useSafeArea: true,
+                                backgroundColor: modalColor,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20),
+                                  ),
+                                ),
+                                builder: (ctx) => SafeArea(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ListTile(
+                                        leading: const Icon(
+                                          Icons.edit,
+                                          color: AppColors.accentBlue,
+                                        ),
+                                        title: Text(
+                                          'Edit Transaction',
+                                          style: TextStyle(color: textPrimary),
+                                        ),
+                                        onTap: () {
+                                          Navigator.pop(ctx);
+                                          _openAddModal(t);
+                                        },
+                                      ),
+                                      ListTile(
+                                        leading: const Icon(
+                                          Icons.delete,
+                                          color: AppColors.statusRed,
+                                        ),
+                                        title: const Text(
+                                          'Delete Transaction',
+                                          style: TextStyle(
+                                            color: AppColors.statusRed,
+                                          ),
+                                        ),
+                                        onTap: () async {
+                                          Navigator.pop(ctx);
+                                          if (t.id != null) {
+                                            await txVm.deleteTransaction(
+                                              t.id!,
+                                              catVm,
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    );
+                      );
                     },
                   ),
           ),

@@ -293,21 +293,24 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                               fontWeight: FontWeight.bold,
                               color: _paymentType == 'Cash'
                                   ? (isDark
-                                      ? Colors.white
-                                      : AppColors.lightTagCashText)
+                                        ? Colors.white
+                                        : AppColors.lightTagCashText)
                                   : textPrimary,
                             ),
                           ),
                         ),
                         selected: _paymentType == 'Cash',
+                        checkmarkColor: isDark
+                            ? Colors.white
+                            : AppColors.lightTagCashText,
                         selectedColor: isDark
                             ? AppColors.statusGreen.withValues(alpha: 0.3)
                             : AppColors.lightTagCashBg,
                         side: BorderSide(
                           color: _paymentType == 'Cash'
                               ? (isDark
-                                  ? AppColors.statusGreen
-                                  : AppColors.lightTagCashText)
+                                    ? AppColors.statusGreen
+                                    : AppColors.lightTagCashText)
                               : chipBorder,
                         ),
                         onSelected: (selected) {
@@ -325,21 +328,24 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                               fontWeight: FontWeight.bold,
                               color: _paymentType == 'Credit'
                                   ? (isDark
-                                      ? Colors.white
-                                      : AppColors.lightTagCreditText)
+                                        ? Colors.white
+                                        : AppColors.lightTagCreditText)
                                   : textPrimary,
                             ),
                           ),
                         ),
                         selected: _paymentType == 'Credit',
+                        checkmarkColor: isDark
+                            ? Colors.white
+                            : AppColors.lightTagCreditText,
                         selectedColor: isDark
                             ? AppColors.tagCredit.withValues(alpha: 0.3)
                             : AppColors.lightTagCreditBg,
                         side: BorderSide(
                           color: _paymentType == 'Credit'
                               ? (isDark
-                                  ? AppColors.tagCredit
-                                  : AppColors.lightTagCreditText)
+                                    ? AppColors.tagCredit
+                                    : AppColors.lightTagCreditText)
                               : chipBorder,
                         ),
                         onSelected: (selected) {
@@ -376,21 +382,24 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                               fontWeight: FontWeight.bold,
                               color: _needOrWant == 'Need'
                                   ? (isDark
-                                      ? Colors.white
-                                      : AppColors.lightTagNeedText)
+                                        ? Colors.white
+                                        : AppColors.lightTagNeedText)
                                   : textPrimary,
                             ),
                           ),
                         ),
                         selected: _needOrWant == 'Need',
+                        checkmarkColor: isDark
+                            ? Colors.white
+                            : AppColors.lightTagNeedText,
                         selectedColor: isDark
                             ? AppColors.tagNeed.withValues(alpha: 0.3)
                             : AppColors.lightTagNeedBg,
                         side: BorderSide(
                           color: _needOrWant == 'Need'
                               ? (isDark
-                                  ? AppColors.tagNeed
-                                  : AppColors.lightTagNeedText)
+                                    ? AppColors.tagNeed
+                                    : AppColors.lightTagNeedText)
                               : chipBorder,
                         ),
                         onSelected: (selected) {
@@ -408,21 +417,24 @@ class _AddEditTransactionModalState extends State<AddEditTransactionModal> {
                               fontWeight: FontWeight.bold,
                               color: _needOrWant == 'Want'
                                   ? (isDark
-                                      ? Colors.white
-                                      : AppColors.lightTagWantText)
+                                        ? Colors.white
+                                        : AppColors.lightTagWantText)
                                   : textPrimary,
                             ),
                           ),
                         ),
                         selected: _needOrWant == 'Want',
+                        checkmarkColor: isDark
+                            ? Colors.white
+                            : AppColors.lightTagWantText,
                         selectedColor: isDark
                             ? AppColors.tagWant.withValues(alpha: 0.3)
                             : AppColors.lightTagWantBg,
                         side: BorderSide(
                           color: _needOrWant == 'Want'
                               ? (isDark
-                                  ? AppColors.tagWant
-                                  : AppColors.lightTagWantText)
+                                    ? AppColors.tagWant
+                                    : AppColors.lightTagWantText)
                               : chipBorder,
                         ),
                         onSelected: (selected) {

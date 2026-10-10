@@ -179,48 +179,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Header Banner
                     Builder(
                       builder: (context) {
-                        final isDark = Theme.of(context).brightness == Brightness.dark;
+                        final isDark =
+                            Theme.of(context).brightness == Brightness.dark;
                         return Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: isDark
                                   ? [AppColors.airForceBlue, AppColors.navyCard]
-                                  : [AppColors.airForceBlue, const Color(0xFF0F2A4A)],
+                                  : [
+                                      AppColors.airForceBlue,
+                                      const Color(0xFF0F2A4A),
+                                    ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: isDark ? AppColors.cardBorder : AppColors.accentBlue.withValues(alpha: 0.3),
+                              color: isDark
+                                  ? AppColors.cardBorder
+                                  : AppColors.accentBlue.withValues(alpha: 0.3),
                             ),
                           ),
                           child: Row(
                             children: [
                               Builder(
                                 builder: (context) {
-                                  final rankAsset = RankHelper.getRankImageAsset(_selectedRank);
+                                  final rankAsset =
+                                      RankHelper.getRankImageAsset(
+                                        _selectedRank,
+                                      );
                                   if (rankAsset != null) {
                                     return Container(
                                       width: 60,
                                       height: 60,
                                       padding: const EdgeInsets.all(6),
                                       decoration: BoxDecoration(
-                                        color: AppColors.accentBlue.withValues(alpha: 0.2),
+                                        color: AppColors.accentBlue.withValues(
+                                          alpha: 0.2,
+                                        ),
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                          color: AppColors.usafGold.withValues(alpha: 0.5),
+                                          color: AppColors.usafGold.withValues(
+                                            alpha: 0.5,
+                                          ),
                                           width: 1.5,
                                         ),
                                       ),
                                       child: Image.asset(
                                         rankAsset,
                                         fit: BoxFit.contain,
-                                        errorBuilder: (ctx, err, stack) => const Icon(
-                                          Icons.military_tech,
-                                          size: 36,
-                                          color: AppColors.usafGold,
-                                        ),
+                                        errorBuilder: (ctx, err, stack) =>
+                                            const Icon(
+                                              Icons.military_tech,
+                                              size: 36,
+                                              color: AppColors.usafGold,
+                                            ),
                                       ),
                                     );
                                   }
@@ -300,7 +314,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         final theme = Theme.of(context);
                         final isDark = theme.brightness == Brightness.dark;
                         final textPrimary = theme.colorScheme.onSurface;
-                        final textSecondary = textPrimary.withValues(alpha: 0.65);
+                        final textSecondary = textPrimary.withValues(
+                          alpha: 0.65,
+                        );
                         final borderColor = isDark
                             ? AppColors.cardBorder
                             : AppColors.lightCardBorder;
@@ -337,10 +353,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       avatar: Icon(
                                         Icons.dark_mode,
                                         size: 16,
-                                        color: themeVm.themeMode == ThemeMode.dark
+                                        color:
+                                            themeVm.themeMode == ThemeMode.dark
                                             ? (isDark
-                                                ? Colors.white
-                                                : AppColors.lightTagAccentText)
+                                                  ? Colors.white
+                                                  : AppColors
+                                                        .lightTagAccentText)
                                             : textSecondary,
                                       ),
                                       label: Center(
@@ -348,23 +366,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           'Dark',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: themeVm.themeMode == ThemeMode.dark
+                                            color:
+                                                themeVm.themeMode ==
+                                                    ThemeMode.dark
                                                 ? (isDark
-                                                    ? Colors.white
-                                                    : AppColors.lightTagAccentText)
+                                                      ? Colors.white
+                                                      : AppColors
+                                                            .lightTagAccentText)
                                                 : textPrimary,
                                           ),
                                         ),
                                       ),
-                                      selected: themeVm.themeMode == ThemeMode.dark,
+                                      selected:
+                                          themeVm.themeMode == ThemeMode.dark,
                                       selectedColor: isDark
-                                          ? AppColors.accentBlue.withValues(alpha: 0.3)
+                                          ? AppColors.accentBlue.withValues(
+                                              alpha: 0.3,
+                                            )
                                           : AppColors.lightTagAccentBg,
                                       side: BorderSide(
-                                        color: themeVm.themeMode == ThemeMode.dark
+                                        color:
+                                            themeVm.themeMode == ThemeMode.dark
                                             ? (isDark
-                                                ? AppColors.accentBlue
-                                                : AppColors.lightTagAccentText)
+                                                  ? AppColors.accentBlue
+                                                  : AppColors
+                                                        .lightTagAccentText)
                                             : borderColor,
                                       ),
                                       onSelected: (selected) {
@@ -372,6 +398,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           themeVm.setThemeMode(ThemeMode.dark);
                                         }
                                       },
+                                      showCheckmark: false,
                                     ),
                                   ),
                                   const SizedBox(width: 8),
@@ -380,10 +407,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       avatar: Icon(
                                         Icons.light_mode,
                                         size: 16,
-                                        color: themeVm.themeMode == ThemeMode.light
+                                        color:
+                                            themeVm.themeMode == ThemeMode.light
                                             ? (isDark
-                                                ? Colors.white
-                                                : AppColors.lightTagAccentText)
+                                                  ? Colors.white
+                                                  : AppColors
+                                                        .lightTagAccentText)
                                             : textSecondary,
                                       ),
                                       label: Center(
@@ -391,23 +420,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           'Light',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: themeVm.themeMode == ThemeMode.light
+                                            color:
+                                                themeVm.themeMode ==
+                                                    ThemeMode.light
                                                 ? (isDark
-                                                    ? Colors.white
-                                                    : AppColors.lightTagAccentText)
+                                                      ? Colors.white
+                                                      : AppColors
+                                                            .lightTagAccentText)
                                                 : textPrimary,
                                           ),
                                         ),
                                       ),
-                                      selected: themeVm.themeMode == ThemeMode.light,
+                                      selected:
+                                          themeVm.themeMode == ThemeMode.light,
                                       selectedColor: isDark
-                                          ? AppColors.accentBlue.withValues(alpha: 0.3)
+                                          ? AppColors.accentBlue.withValues(
+                                              alpha: 0.3,
+                                            )
                                           : AppColors.lightTagAccentBg,
                                       side: BorderSide(
-                                        color: themeVm.themeMode == ThemeMode.light
+                                        color:
+                                            themeVm.themeMode == ThemeMode.light
                                             ? (isDark
-                                                ? AppColors.accentBlue
-                                                : AppColors.lightTagAccentText)
+                                                  ? AppColors.accentBlue
+                                                  : AppColors
+                                                        .lightTagAccentText)
                                             : borderColor,
                                       ),
                                       onSelected: (selected) {
@@ -415,6 +452,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           themeVm.setThemeMode(ThemeMode.light);
                                         }
                                       },
+                                      showCheckmark: false,
                                     ),
                                   ),
                                   const SizedBox(width: 8),
@@ -423,10 +461,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       avatar: Icon(
                                         Icons.settings_suggest,
                                         size: 16,
-                                        color: themeVm.themeMode == ThemeMode.system
+                                        color:
+                                            themeVm.themeMode ==
+                                                ThemeMode.system
                                             ? (isDark
-                                                ? Colors.white
-                                                : AppColors.lightTagAccentText)
+                                                  ? Colors.white
+                                                  : AppColors
+                                                        .lightTagAccentText)
                                             : textSecondary,
                                       ),
                                       label: Center(
@@ -434,30 +475,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           'System',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: themeVm.themeMode == ThemeMode.system
+                                            color:
+                                                themeVm.themeMode ==
+                                                    ThemeMode.system
                                                 ? (isDark
-                                                    ? Colors.white
-                                                    : AppColors.lightTagAccentText)
+                                                      ? Colors.white
+                                                      : AppColors
+                                                            .lightTagAccentText)
                                                 : textPrimary,
                                           ),
                                         ),
                                       ),
-                                      selected: themeVm.themeMode == ThemeMode.system,
+                                      selected:
+                                          themeVm.themeMode == ThemeMode.system,
                                       selectedColor: isDark
-                                          ? AppColors.accentBlue.withValues(alpha: 0.3)
+                                          ? AppColors.accentBlue.withValues(
+                                              alpha: 0.3,
+                                            )
                                           : AppColors.lightTagAccentBg,
                                       side: BorderSide(
-                                        color: themeVm.themeMode == ThemeMode.system
+                                        color:
+                                            themeVm.themeMode ==
+                                                ThemeMode.system
                                             ? (isDark
-                                                ? AppColors.accentBlue
-                                                : AppColors.lightTagAccentText)
+                                                  ? AppColors.accentBlue
+                                                  : AppColors
+                                                        .lightTagAccentText)
                                             : borderColor,
                                       ),
                                       onSelected: (selected) {
                                         if (selected) {
-                                          themeVm.setThemeMode(ThemeMode.system);
+                                          themeVm.setThemeMode(
+                                            ThemeMode.system,
+                                          );
                                         }
                                       },
+                                      showCheckmark: false,
                                     ),
                                   ),
                                 ],
