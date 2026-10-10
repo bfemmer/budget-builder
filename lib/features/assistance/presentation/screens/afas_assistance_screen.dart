@@ -16,8 +16,8 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
   int _selectedCategoryIndex = 0;
 
   final String _afasPortalUrl = 'https://portal.afas.org';
-  final String _afasStandardInfoUrl =
-      'https://afas.org/how-we-help/standard-assistance/';
+  // final String _afasStandardInfoUrl =
+  //     'https://afas.org/how-we-help/standard-assistance/';
   final String _redCrossPhone = '1-877-272-7337';
 
   @override
