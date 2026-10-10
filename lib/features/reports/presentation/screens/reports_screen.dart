@@ -1,6 +1,8 @@
+import 'package:budget/features/reports/utils/pdf_report_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:printing/printing.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/currency_formatter.dart';
@@ -63,7 +65,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
         .length;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Financial & Spending Reports')),
+      appBar: AppBar(
+        title: const Text('Financial & Spending Reports'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf),
+            tooltip: 'Export PDF Report',
+            onPressed: () => _exportPdf(context, reportsVm, catVm, txVm),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -109,11 +120,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   _buildSegmentButton(
                     label:
                         reportsVm.selectedTimeframe ==
-                                ReportTimeframe.specificMonth
-                            ? DateFormat(
-                                'MMM yyyy',
-                              ).format(reportsVm.selectedMonth)
-                            : 'Select Month',
+                            ReportTimeframe.specificMonth
+                        ? DateFormat('MMM yyyy').format(reportsVm.selectedMonth)
+                        : 'Select Month',
                     isSelected:
                         reportsVm.selectedTimeframe ==
                         ReportTimeframe.specificMonth,
@@ -124,7 +133,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
               ),
             ),
 
-            if (reportsVm.selectedTimeframe == ReportTimeframe.specificMonth) ...[
+            if (reportsVm.selectedTimeframe ==
+                ReportTimeframe.specificMonth) ...[
               const SizedBox(height: 8),
               Center(
                 child: InkWell(
@@ -636,6 +646,24 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 },
               ),
             ],
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => _exportPdf(context, reportsVm, catVm, txVm),
+                icon: const Icon(Icons.picture_as_pdf),
+                label: const Text('EXPORT REPORT AS PDF'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  backgroundColor: AppColors.accentBlue,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -685,8 +713,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     int selectedYear =
         reportsVm.selectedTimeframe == ReportTimeframe.specificMonth
-            ? reportsVm.selectedMonth.year
-            : DateTime.now().year;
+        ? reportsVm.selectedMonth.year
+        : DateTime.now().year;
 
     final months = [
       'Jan',
@@ -791,11 +819,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                               final monthIndex = index + 1;
                               final isSelected =
                                   reportsVm.selectedTimeframe ==
-                                          ReportTimeframe.specificMonth &&
-                                      reportsVm.selectedMonth.year ==
-                                          selectedYear &&
-                                      reportsVm.selectedMonth.month ==
-                                          monthIndex;
+                                      ReportTimeframe.specificMonth &&
+                                  reportsVm.selectedMonth.year ==
+                                      selectedYear &&
+                                  reportsVm.selectedMonth.month == monthIndex;
 
                               return Expanded(
                                 child: Padding(
@@ -816,9 +843,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                         color: isSelected
                                             ? AppColors.accentBlue
                                             : (isDark
-                                                ? AppColors.navyCard
-                                                : AppColors
-                                                    .lightInputBackground),
+                                                  ? AppColors.navyCard
+                                                  : AppColors
+                                                        .lightInputBackground),
                                         borderRadius: BorderRadius.circular(10),
                                         border: Border.all(
                                           color: isSelected
@@ -899,5 +926,76 @@ class _ReportsScreenState extends State<ReportsScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> _exportPdf(
+    BuildContext context,
+    ReportsViewModel reportsVm,
+    CategoryViewModel catVm,
+    TransactionViewModel txVm,
+  ) async {
+    try {
+      final transactions = txVm.transactions;
+      final filteredTx = reportsVm.getFilteredTransactions(transactions);
+
+      final totalExpenses = reportsVm.getTotalExpenses(catVm, transactions);
+      final totalIncome = reportsVm.getTotalIncome(catVm, transactions);
+      final netCashFlow = reportsVm.getNetCashFlow(catVm, transactions);
+
+      final expenseMap = reportsVm.getExpenseCategoryMap(catVm, transactions);
+      final incomeMap = reportsVm.getIncomeCategoryMap(catVm, transactions);
+
+      final needsSpent = reportsVm.getNeedsExpenses(catVm, transactions);
+      final wantsSpent = reportsVm.getWantsExpenses(catVm, transactions);
+
+      String timeframeLabel;
+      switch (reportsVm.selectedTimeframe) {
+        case ReportTimeframe.last7Days:
+          timeframeLabel = 'Last 7 Days';
+          break;
+        case ReportTimeframe.lastMonth:
+          timeframeLabel = 'Last Month';
+          break;
+        case ReportTimeframe.yearToDate:
+          timeframeLabel = 'Year to Date ${DateTime.now().year}';
+          break;
+        case ReportTimeframe.specificMonth:
+          timeframeLabel = DateFormat('MMMM yyyy')
+              .format(reportsVm.selectedMonth);
+          break;
+      }
+
+      final pdfBytes = await PdfReportGenerator.generate(
+        timeframeLabel: timeframeLabel,
+        totalIncome: totalIncome,
+        totalExpenses: totalExpenses,
+        netCashFlow: netCashFlow,
+        needsSpent: needsSpent,
+        wantsSpent: wantsSpent,
+        expenseCategoryMap: expenseMap,
+        incomeCategoryMap: incomeMap,
+        transactions: filteredTx,
+        catVm: catVm,
+      );
+
+      final sanitizedLabel = timeframeLabel
+          .replaceAll(RegExp(r'[^\w\s]+'), '')
+          .replaceAll(' ', '_');
+      final filename = 'Budget_Report_$sanitizedLabel.pdf';
+
+      await Printing.layoutPdf(
+        onLayout: (format) async => pdfBytes,
+        name: filename,
+      );
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to generate PDF: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }
