@@ -4,22 +4,30 @@ import '../../../transactions/data/models/transaction_model.dart';
 import '../../../transactions/domain/entities/transaction_entity.dart';
 import '../../../transactions/domain/repositories/transaction_repository.dart';
 
-enum ReportTimeframe { last7Days, lastMonth, yearToDate }
+enum ReportTimeframe { last7Days, lastMonth, yearToDate, specificMonth }
 
 class ReportsViewModel extends ChangeNotifier {
   final TransactionRepository repository;
 
   ReportTimeframe _selectedTimeframe = ReportTimeframe.lastMonth;
+  DateTime _selectedMonth = DateTime(DateTime.now().year, DateTime.now().month);
   List<TransactionModel> _allTransactions = [];
   bool _isLoading = false;
 
   ReportTimeframe get selectedTimeframe => _selectedTimeframe;
+  DateTime get selectedMonth => _selectedMonth;
   bool get isLoading => _isLoading;
 
   ReportsViewModel({required this.repository});
 
   void setTimeframe(ReportTimeframe timeframe) {
     _selectedTimeframe = timeframe;
+    notifyListeners();
+  }
+
+  void setSelectedMonth(DateTime month) {
+    _selectedMonth = DateTime(month.year, month.month);
+    _selectedTimeframe = ReportTimeframe.specificMonth;
     notifyListeners();
   }
 
@@ -65,6 +73,8 @@ class ReportsViewModel extends ChangeNotifier {
           return date.isAfter(lastMonthDate) && date.isBefore(now.add(const Duration(days: 1)));
         case ReportTimeframe.yearToDate:
           return date.year == now.year;
+        case ReportTimeframe.specificMonth:
+          return date.year == _selectedMonth.year && date.month == _selectedMonth.month;
       }
     }).toList();
   }

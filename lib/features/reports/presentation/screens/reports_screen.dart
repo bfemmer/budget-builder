@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -97,7 +98,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     textColor: textSecondary,
                   ),
                   _buildSegmentButton(
-                    label: 'Year-to-Date',
+                    label: 'YTD',
                     isSelected:
                         reportsVm.selectedTimeframe ==
                         ReportTimeframe.yearToDate,
@@ -105,11 +106,66 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         reportsVm.setTimeframe(ReportTimeframe.yearToDate),
                     textColor: textSecondary,
                   ),
+                  _buildSegmentButton(
+                    label:
+                        reportsVm.selectedTimeframe ==
+                                ReportTimeframe.specificMonth
+                            ? DateFormat(
+                                'MMM yyyy',
+                              ).format(reportsVm.selectedMonth)
+                            : 'Select Month',
+                    isSelected:
+                        reportsVm.selectedTimeframe ==
+                        ReportTimeframe.specificMonth,
+                    onTap: () => _showMonthPicker(context, reportsVm),
+                    textColor: textSecondary,
+                  ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 20),
+            if (reportsVm.selectedTimeframe == ReportTimeframe.specificMonth) ...[
+              const SizedBox(height: 8),
+              Center(
+                child: InkWell(
+                  onTap: () => _showMonthPicker(context, reportsVm),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.calendar_month,
+                          size: 15,
+                          color: AppColors.accentBlue,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          'Reporting Period: ${DateFormat('MMMM yyyy').format(reportsVm.selectedMonth)}',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.accentBlue,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.arrow_drop_down,
+                          size: 18,
+                          color: AppColors.accentBlue,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+
+            const SizedBox(height: 16),
 
             // Income vs Expense Cash Flow Comparison Card (Hero Card)
             Container(
@@ -596,7 +652,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.accentBlue : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
@@ -604,14 +660,207 @@ class _ReportsScreenState extends State<ReportsScreen> {
           child: Text(
             label,
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               color: isSelected ? Colors.white : textColor,
             ),
           ),
         ),
       ),
+    );
+  }
+
+  void _showMonthPicker(BuildContext context, ReportsViewModel reportsVm) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
+    final borderColor = isDark
+        ? AppColors.cardBorder
+        : AppColors.lightCardBorder;
+
+    int selectedYear =
+        reportsVm.selectedTimeframe == ReportTimeframe.specificMonth
+            ? reportsVm.selectedMonth.year
+            : DateTime.now().year;
+
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              backgroundColor: cardColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: BorderSide(color: borderColor),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Select Month',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: textPrimary,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Year Selection Header
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? AppColors.inputBackground
+                          : AppColors.lightInputBackground,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.chevron_left, color: textPrimary),
+                          onPressed: () {
+                            setDialogState(() {
+                              selectedYear--;
+                            });
+                          },
+                        ),
+                        Text(
+                          '$selectedYear',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: textPrimary,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.chevron_right, color: textPrimary),
+                          onPressed: () {
+                            setDialogState(() {
+                              selectedYear++;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Month Grid (4 rows x 3 columns)
+                  SizedBox(
+                    width: 280,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(4, (rowIndex) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            children: List.generate(3, (colIndex) {
+                              final index = rowIndex * 3 + colIndex;
+                              final monthIndex = index + 1;
+                              final isSelected =
+                                  reportsVm.selectedTimeframe ==
+                                          ReportTimeframe.specificMonth &&
+                                      reportsVm.selectedMonth.year ==
+                                          selectedYear &&
+                                      reportsVm.selectedMonth.month ==
+                                          monthIndex;
+
+                              return Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    right: colIndex < 2 ? 8 : 0,
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      reportsVm.setSelectedMonth(
+                                        DateTime(selectedYear, monthIndex),
+                                      );
+                                      Navigator.of(context).pop();
+                                    },
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      height: 38,
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? AppColors.accentBlue
+                                            : (isDark
+                                                ? AppColors.navyCard
+                                                : AppColors
+                                                    .lightInputBackground),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: isSelected
+                                              ? AppColors.accentBlue
+                                              : borderColor,
+                                        ),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        months[index],
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: isSelected
+                                              ? FontWeight.bold
+                                              : FontWeight.w500,
+                                          color: isSelected
+                                              ? Colors.white
+                                              : textPrimary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Cancel', style: TextStyle(color: textSecondary)),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
