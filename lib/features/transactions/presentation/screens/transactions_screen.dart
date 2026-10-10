@@ -544,14 +544,14 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                                             color: AppColors.statusRed,
                                           ),
                                         ),
-                                        onTap: () async {
+                                        onTap: () {
                                           Navigator.pop(ctx);
-                                          if (t.id != null) {
-                                            await txVm.deleteTransaction(
-                                              t.id!,
-                                              catVm,
-                                            );
-                                          }
+                                          _confirmDelete(
+                                            context,
+                                            t,
+                                            txVm,
+                                            catVm,
+                                          );
                                         },
                                       ),
                                     ],
@@ -575,5 +575,105 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
         onPressed: () => _openAddModal(),
       ),
     );
+  }
+
+  Future<void> _confirmDelete(
+    BuildContext context,
+    TransactionModel t,
+    TransactionViewModel txVm,
+    CategoryViewModel catVm,
+  ) async {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final cardColor = theme.cardTheme.color ?? theme.colorScheme.surface;
+    final borderColor = isDark
+        ? AppColors.cardBorder
+        : AppColors.lightCardBorder;
+    final textPrimary = theme.colorScheme.onSurface;
+    final textSecondary = textPrimary.withValues(alpha: 0.65);
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          backgroundColor: cardColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: borderColor),
+          ),
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.statusRed.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete_outline,
+                  color: AppColors.statusRed,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Delete Transaction',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: textPrimary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Text(
+            'Are you sure you want to delete "${t.description}" (${CurrencyFormatter.format(t.amount)})? This action cannot be undone.',
+            style: TextStyle(
+              fontSize: 14,
+              color: textSecondary,
+              height: 1.4,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: textSecondary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.statusRed,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 0,
+              ),
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true && t.id != null) {
+      await txVm.deleteTransaction(t.id!, catVm);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Deleted "${t.description}"'),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 }
