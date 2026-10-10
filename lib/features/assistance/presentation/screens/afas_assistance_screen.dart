@@ -60,13 +60,13 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
             Text('AFAS Assistance'),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.open_in_new),
-            tooltip: 'Visit Official AFAS Website',
-            onPressed: () => UrlLauncherHelper.openUrl(_afasStandardInfoUrl),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.open_in_new),
+        //     tooltip: 'Visit Official AFAS Website',
+        //     onPressed: () => UrlLauncherHelper.openUrl(_afasStandardInfoUrl),
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -273,37 +273,6 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
             'AFAS standard assistance provides zero-interest loans and emergency grants to help Airmen and Guardians overcome temporary financial hardships, unexpected travel, or emergency expenses.',
             style: TextStyle(fontSize: 13.5, color: Colors.white, height: 1.4),
           ),
-          const SizedBox(height: 18),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.usafGold,
-                    foregroundColor: AppColors.navyDark,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  icon: const Icon(
-                    Icons.launch,
-                    size: 18,
-                    color: AppColors.navyDark,
-                  ),
-                  label: const Text(
-                    'APPLY AT AFAS PORTAL',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      color: AppColors.navyDark,
-                    ),
-                  ),
-                  onPressed: () => UrlLauncherHelper.openUrl(_afasPortalUrl),
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );
@@ -359,12 +328,6 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    const Icon(
-                      Icons.phone,
-                      size: 13,
-                      color: AppColors.statusRed,
-                    ),
-                    const SizedBox(width: 4),
                     Text(
                       _redCrossPhone,
                       style: TextStyle(
@@ -439,6 +402,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
           });
         }
       },
+      showCheckmark: false,
     );
   }
 
@@ -1025,7 +989,7 @@ class _AfasAssistanceScreenState extends State<AfasAssistanceScreen>
                 color: Colors.white,
               ),
               label: const Text(
-                'OPEN PORTAL.AFAS.ORG',
+                'Open portal.afas.org',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
